@@ -12,29 +12,42 @@ for col in sites.columns:
         toDrop.append(col)
 sites.drop(toDrop, axis=1, inplace=True) # drop some useless columns
 
+years = ['2021', '2022', '2023']
+for year in years:
+    print(year)
+    start = '{}-04-30'.format(year)
+    months = pd.date_range(start=start, periods=5, freq="1M")
+    for month in months:
+        month = month + pd.Timedelta(days=1)
+        thirties = [6, 9]
+        thirty1s = [5, 7, 8]
+        print('month: {}'.format(month))
+        if month.month in thirties:
+            periods = 30
+        elif month.month in thirty1s:
+            periods = 31
+        days = pd.date_range(start=month, periods=periods, freq="1D")
+        dayDict = {}
+        for day in days:
+            print(day)
+            hours = pd.date_range(start=day, periods=24, freq="1H",)
+            FH = FastHerbie(hours, model="hrrr")
+            print('getting {}'.format(day))
+            ds = FH.xarray(":(?:TMP|RH):2 m", remove_grib=True)
+            points = ds.herbie.nearest_points(sites)
+            df = points.to_dataframe()
+            df.reset_index(inplace=True)
+            df.sort_values(by=['point', 'valid_time'], inplace=True)
+            dayDict[day] = df
 
-start = '2021-05-01'
-days = pd.date_range(start=start, periods=30, freq="1D")
-dayDict = {}
-for day in days:
-    hours = pd.date_range(start=day, periods=24, freq="1H",)
-    FH = FastHerbie(hours, model="hrrr")
-    print('getting {}'.format(day))
-    ds = FH.xarray(":(?:TMP|RH):2 m", remove_grib=True)
-    points = ds.herbie.nearest_points(sites)
-    df = points.to_dataframe()
-    df.reset_index(inplace=True)
-    df.sort_values(by=['point', 'valid_time'], inplace=True)
-    dayDict[day] = df
+        ag = {}
+        for day in days:
+            daystr = str(day)[0:10]
+            ag[daystr] = dayDict[day]
+            ag[daystr]['time_point'] = ag[daystr]['time'].astype(str) + ' ' + ag[daystr]['point'].astype(str)
+            #ag[daystr].set_index('time_point')
 
-ag = {}
-for day in days:
-    daystr = str(day)[0:10]
-    ag[daystr] = dayDict[day]
-    ag[daystr]['time_point'] = ag[daystr]['time'].astype(str) + ' ' + ag[daystr]['point'].astype(str)
-    #ag[daystr].set_index('time_point')
+        mayTempAndRH = pd.concat(ag.values(), ignore_index=True)
+        print('sending to csv')
+        mayTempAndRH.to_csv(r'D:\Will_Git\DU-Thesis\Year2\HRRR_Data\tempAndRH\month{}.csv'.format(month.month))
 
-mayTempAndRH = pd.concat(ag.values(), ignore_index=True)
-mayTempAndRH.to_csv(r'D:\Will_Git\DU-Thesis\Year2\HRRR_Data\tempAndRH\may.csv')
-
-ex = ag['2021-05-01']
