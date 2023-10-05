@@ -12,7 +12,7 @@ for col in sites.columns:
         toDrop.append(col)
 sites.drop(toDrop, axis=1, inplace=True) # drop some useless columns
 
-years = ['2021', '2022', '2023']
+years = ['2022', '2023']
 for year in years:
     print(year)
     start = '{}-04-30'.format(year)
@@ -33,7 +33,8 @@ for year in years:
             hours = pd.date_range(start=day, periods=24, freq="1H",)
             FH = FastHerbie(hours, model="hrrr")
             print('getting {}'.format(day))
-            ds = FH.xarray(":(?:TMP|RH):2 m", remove_grib=True)
+            #ds = FH.xarray(":(?:TMP|RH):2 m", remove_grib=True)
+            ds = FH.xarray(":[U|V]GRD:10 m", remove_grib=True)
             points = ds.herbie.nearest_points(sites)
             df = points.to_dataframe()
             df.reset_index(inplace=True)
@@ -49,5 +50,5 @@ for year in years:
 
         mayTempAndRH = pd.concat(ag.values(), ignore_index=True)
         print('sending to csv')
-        mayTempAndRH.to_csv(r'D:\Will_Git\DU-Thesis\Year2\HRRR_Data\tempAndRH\month{}.csv'.format(month.month))
+        mayTempAndRH.to_csv(r"D:\Will_Git\Ozone_ML\Year2\HRRR_Data\wind\year{}month{}.csv".format(year,month.month))
 
