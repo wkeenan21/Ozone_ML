@@ -1,11 +1,13 @@
 import pandas as pd
 import os
+from functools import reduce
 """
 List our file paths
 """
 windFold = r"D:\Will_Git\Ozone_ML\Year2\HRRR_Data\wind"
 tempFold = r"D:\Will_Git\Ozone_ML\Year2\HRRR_Data\tempAndRH"
 oFold = r"D:\Will_Git\Ozone_ML\Year2\EPA_Data"
+mFold = r"D:\Will_Git\Ozone_ML\Year2\HRRR_Data\meteorology"
 
 """
 First we merge everything into one df
@@ -22,31 +24,38 @@ dfs = {}
 
 for year in years:
     for month in months:
+        print(year, month)
         time = "year{}month{}.csv".format(year, month)
         time2 = "year{}month{}{}.csv".format(year, '0', month)
         wPath = os.path.join(windFold, time)
         tPath = os.path.join(tempFold, time)
         oPath = os.path.join(oFold, time2)
+        mPath = os.path.join(mFold, time)
+        mDf = pd.read_csv(mPath)
         wDf = pd.read_csv(wPath)
         tDf = pd.read_csv(tPath)
         oDf = pd.read_csv(oPath)
         wDf.drop(labels=drop, axis=1, inplace=True)
         tDf.drop(labels=drop, axis=1, inplace=True)
-        oDf.drop(labels=drop2, axis=1, inplace=True)
+        if year != '2023' and (month != '8' or month != '9'):
+            oDf.drop(labels=drop2, axis=1, inplace=True)
+            mDf.rename(columns={'unknown_x': 'MAXUVV', 'unknown_y': 'MAXDVV'}, inplace=True)
 
-        hrrr = pd.merge(wDf, tDf, on=['time', 'point_latitude', 'point_longitude'])
-        hrrr.rename(columns={"point_latitude": "latitude", "point_longitude": "longitude", 'time':'datetime'}, inplace=True)
-        hrrr['datetime'] = pd.to_datetime(hrrr['datetime'], format='%Y-%m-%d %H:%M:%S', utc=True)
+            df_list = [wDf, tDf, mDf]
+            hrrr = reduce(lambda left, right: pd.merge(left, right, on=['time', 'point_latitude', 'point_longitude'], how='outer'), df_list)
+            #hrrr = pd.merge(wDf, tDf, on=['time', 'point_latitude', 'point_longitude'])
+            hrrr.rename(columns={"point_latitude": "latitude", "point_longitude": "longitude", 'time':'datetime'}, inplace=True)
+            hrrr['datetime'] = pd.to_datetime(hrrr['datetime'], format='%Y-%m-%d %H:%M:%S', utc=True)
 
-        oDf['datetime'] = oDf['date_gmt'] + oDf['time_gmt']
-        oDf['datetime'] = pd.to_datetime(oDf['datetime'], format='%Y-%m-%d%H:%M', utc=True)
+            oDf['datetime'] = oDf['date_gmt'] + oDf['time_gmt']
+            oDf['datetime'] = pd.to_datetime(oDf['datetime'], format='%Y-%m-%d%H:%M', utc=True)
 
-        a = pd.merge(hrrr, oDf, on=['datetime', 'latitude', 'longitude'])
-        dfs["{}-{}".format(month, year)] = a
+            a = pd.merge(hrrr, oDf, on=['datetime', 'latitude', 'longitude'])
+            dfs["{}-{}".format(month, year)] = a
 
 
 a = pd.concat(dfs.values(), ignore_index=True)
-a.to_csv(r"D:\Will_Git\Ozone_ML\Year2\Merged_Data\merge.csv")
+a.to_csv(r"D:\Will_Git\Ozone_ML\Year2\Merged_Data\merge2.csv")
 
 
 sites = a['latitude'].unique()

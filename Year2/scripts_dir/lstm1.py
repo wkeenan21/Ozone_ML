@@ -14,12 +14,12 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
 # Import data
-O3J = pd.read_csv(r"C:\Users\willy\Documents\GitHub\DU-Thesis\Ozone\csvs\today\ozoneJulyDenver.csv")
+O3J = pd.read_csv(r"D:\Will_Git\Ozone_ML\Year2\Merged_Data\merge2.csv")
 
 
 '''configure the model'''
 timesize = 6 ##e.g., past 6 hours
-input_var_cnt = 4 ##the number of variables used to perform prediction e.g., NO2, Ozone ... from the previous x tine steps
+input_var_cnt = 9 ##the number of variables used to perform prediction e.g., NO2, Ozone ... from the previous x tine steps
 input_lstm = Input(shape=(timesize, input_var_cnt)) ##what is the input for every sample, sample count is not included every sample should be a 2D matrix
 ##prepare a LSTM layer
 unit_lstm = 32 ##hidden dimensions transfer data, larger more complex model
@@ -32,18 +32,22 @@ model.compile(loss='mean_squared_error', optimizer='adam') ##how to measure the 
 stations = []
 outputs = []
 trains = []
-for station in O3J['site_will'].unique():
-    oneStation = O3J[O3J['site_will'] == station]
-    oneStation.reset_index(inplace=True)
+dtownDen = [float(39.751184)]
+#for station in O3J['site_number'].unique():
+for station in dtownDen:
+    oneStation = O3J[O3J['latitude'] == station]
     stations.append(station)
+    print(oneStation.head())
+    oneStation.dropna(inplace=True)
+    oneStation.reset_index(inplace=True)
 
-    inputArray = np.zeros(shape=((len(oneStation)),6,4))
+    inputArray = np.zeros(shape=((len(oneStation)),6,9))
     outputArray = np.zeros(shape=((len(oneStation))))
     for index, row in oneStation.iterrows():
         if index < (len(oneStation) - 6):
-            input = oneStation[['sample_mea','HourlyRelativeHumidity', 'HourlyDryBulbTemperature', 'HourlyWindSpeed']][index:index+6].to_numpy()
+            input = oneStation[['sample_measurement','t2m', 'r2', 'sp', 'dswrf', 'MAXUVV', 'MAXDVV', 'u10', 'v10']][index:index+6].to_numpy()
             inputArray[index] = input
-            outputArray[index] = oneStation['sample_mea'][index+6]
+            outputArray[index] = oneStation['sample_measurement'][index+6]
 
     trainX = inputArray
     trainY = outputArray
