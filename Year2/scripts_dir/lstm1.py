@@ -1,16 +1,8 @@
-import requests
+
 import pandas as pd
 import numpy as np
-import tensorflow as tf
 from tensorflow.keras.layers import Input, LSTM,Dense
 from tensorflow.keras import layers, optimizers, losses, metrics, Model
-from tensorflow.keras import regularizers
-import numpy.ma as ma
-import time
-from tensorflow.keras import activations
-import keras
-import keras.backend as K
-import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
 # Import data
@@ -33,11 +25,11 @@ stations = []
 outputs = []
 trains = []
 dtownDen = [float(39.751184)]
-#for station in O3J['site_number'].unique():
+
+#for station in O3J['latitude'].unique():
 for station in dtownDen:
     oneStation = O3J[O3J['latitude'] == station]
     stations.append(station)
-    print(oneStation.head())
     oneStation.dropna(inplace=True)
     oneStation.reset_index(inplace=True)
 
@@ -49,13 +41,15 @@ for station in dtownDen:
             inputArray[index] = input
             outputArray[index] = oneStation['sample_measurement'][index+6]
 
-    trainX = inputArray
-    trainY = outputArray
-    model.fit(trainX, trainY, epochs=100, batch_size=32, verbose=2)
-    trainPredict = model.predict(trainX)
+    model.fit(inputArray, outputArray, epochs=100, batch_size=32, verbose=2)
+    trainPredict = model.predict(inputArray)
 
     outputs.append(outputArray)
     trains.append(trainPredict)
+
+print('why is the model predicting all the outputs to be the same value?')
+print(trainPredict[0:10])
+
 
 def runRegression(xvars, y):
     X = xvars.reshape(-1,1)
@@ -67,8 +61,8 @@ def runRegression(xvars, y):
     print(f"coefficient of determination: {r_sq}")
     #print('coefficients '+ str(model1.coef_))
     #print('intercept '+ str(model1.intercept_))
-
-for i in range(len(outputs)):
-    print(stations[i])
-    runRegression(xvars=outputs[i], y=trains[i])
+#
+# for i in range(len(outputs)):
+#     print(stations[i])
+#     runRegression(xvars=outputs[i], y=trains[i])
 
