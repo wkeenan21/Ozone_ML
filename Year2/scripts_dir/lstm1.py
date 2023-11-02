@@ -6,7 +6,18 @@ from tensorflow.keras import layers, optimizers, losses, metrics, Model
 from sklearn.linear_model import LinearRegression
 
 # Import data
-O3J = pd.read_csv(r"D:\Will_Git\Ozone_ML\Year2\Merged_Data\merge2.csv")
+O3J = pd.read_csv(r"C:\Users\wkeenan\OneDrive - DOI\Documents\DU\Ozone_ML\Year2\Merged_Data\merge2.csv")
+
+def normalize(df, cols):
+    df2 = df.copy()
+    for col in cols:
+        mini = df2[col].min()
+        maxi = df2[col].max()
+        rang = maxi - mini
+        df2[col] = (df2[col] - mini) / rang
+    return df2
+
+test = normalize(O3J, ['sample_measurement','t2m', 'r2', 'sp', 'dswrf', 'MAXUVV', 'MAXDVV', 'u10', 'v10'])
 
 
 '''configure the model'''
@@ -18,7 +29,7 @@ unit_lstm = 32 ##hidden dimensions transfer data, larger more complex model
 lstmlayer = LSTM(unit_lstm) (input_lstm) ##this outputs a matrix of 1*unit_lstm, the format is the layer (input), the output of the layer stores the time series info and the interaction of variables..
 denselayer = Dense(1)(lstmlayer) ## reduce the hidden dimension to 1 ==== output data ,1 value for 1 input sample --- predicted ozone
 model = Model(inputs = input_lstm, outputs = denselayer)
-model.compile(loss='mean_squared_error', optimizer='adam') ##how to measure the accuracy  compute mean squared error using all y_pred, y_true
+model.compile(loss='mse', optimizer='adam') ##how to measure the accuracy  compute mean squared error using all y_pred, y_true
 
 # Loop through stations, run LSTM on data from each one, run regression on the results comparing actual vs expected value
 stations = []
@@ -28,7 +39,7 @@ dtownDen = [float(39.751184)]
 
 #for station in O3J['latitude'].unique():
 for station in dtownDen:
-    oneStation = O3J[O3J['latitude'] == station]
+    oneStation = test[test['latitude'] == station]
     stations.append(station)
     oneStation.dropna(inplace=True)
     oneStation.reset_index(inplace=True)
@@ -62,7 +73,12 @@ def runRegression(xvars, y):
     #print('coefficients '+ str(model1.coef_))
     #print('intercept '+ str(model1.intercept_))
 #
-# for i in range(len(outputs)):
-#     print(stations[i])
-#     runRegression(xvars=outputs[i], y=trains[i])
+for i in range(len(outputs)):
+    print(stations[i])
+    runRegression(xvars=outputs[i], y=trains[i])
 
+from matplotlib import pyplot
+
+pyplot.scatter(x=outputs[1], y=trains[1])
+pyplot.show()
+pyplot.close()
