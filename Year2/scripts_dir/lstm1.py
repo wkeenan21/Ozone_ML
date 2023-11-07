@@ -1,13 +1,21 @@
 
+import os
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from tensorflow.keras.layers import Input, LSTM,Dense
 from tensorflow.keras import layers, optimizers, losses, metrics, Model
 from sklearn.linear_model import LinearRegression
+import math
+from math import log10, floor, log
+import scipy.stats
 
 # Import data
 O3J = pd.read_csv(r"C:\Users\wkeenan\OneDrive - DOI\Documents\DU\Ozone_ML\Year2\Merged_Data\merge2.csv")
 
+# this function normalizes all the variables to be between zero and 1
 def normalize(df, cols):
     df2 = df.copy()
     for col in cols:
@@ -17,7 +25,8 @@ def normalize(df, cols):
         df2[col] = (df2[col] - mini) / rang
     return df2
 
-test = normalize(O3J, ['sample_measurement','t2m', 'r2', 'sp', 'dswrf', 'MAXUVV', 'MAXDVV', 'u10', 'v10'])
+# normalize the data
+O3J = normalize(O3J, ['sample_measurement','t2m', 'r2', 'sp', 'dswrf', 'MAXUVV', 'MAXDVV', 'u10', 'v10'])
 
 
 '''configure the model'''
@@ -36,10 +45,12 @@ stations = []
 outputs = []
 trains = []
 dtownDen = [float(39.751184)]
+results = {}
 
-#for station in O3J['latitude'].unique():
+# I could loop through each ozone monitoring site, but I'll just loop through one site for an example
+#for station in test['latitude'].unique():
 for station in dtownDen:
-    oneStation = test[test['latitude'] == station]
+    oneStation = O3J[O3J['latitude'] == station]
     stations.append(station)
     oneStation.dropna(inplace=True)
     oneStation.reset_index(inplace=True)
@@ -58,10 +69,6 @@ for station in dtownDen:
     outputs.append(outputArray)
     trains.append(trainPredict)
 
-print('why is the model predicting all the outputs to be the same value?')
-print(trainPredict[0:10])
-
-
 def runRegression(xvars, y):
     X = xvars.reshape(-1,1)
     y = y
@@ -74,11 +81,6 @@ def runRegression(xvars, y):
     #print('intercept '+ str(model1.intercept_))
 #
 for i in range(len(outputs)):
-    print(stations[i])
+    print('latitude of station{}'.format(stations[i]))
     runRegression(xvars=outputs[i], y=trains[i])
 
-from matplotlib import pyplot
-
-pyplot.scatter(x=outputs[1], y=trains[1])
-pyplot.show()
-pyplot.close()
