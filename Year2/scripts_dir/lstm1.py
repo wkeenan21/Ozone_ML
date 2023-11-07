@@ -47,9 +47,9 @@ trains = []
 dtownDen = [float(39.751184)]
 results = {}
 
-# I could loop through each ozone monitoring site, but I'll just loop through one site for an example
-#for station in test['latitude'].unique():
-for station in dtownDen:
+
+for station in O3J['latitude'].unique():
+#for station in dtownDen:
     oneStation = O3J[O3J['latitude'] == station]
     stations.append(station)
     oneStation.dropna(inplace=True)
