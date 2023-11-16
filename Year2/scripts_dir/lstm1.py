@@ -37,8 +37,8 @@ outputs = []
 trains = []
 dtownDen = [float(39.751184)]
 
-#for station in O3J['latitude'].unique():
-for station in dtownDen:
+for station in test['latitude'].unique():
+#for station in dtownDen:
     oneStation = test[test['latitude'] == station]
     stations.append(station)
     oneStation.dropna(inplace=True)
@@ -57,10 +57,6 @@ for station in dtownDen:
 
     outputs.append(outputArray)
     trains.append(trainPredict)
-
-print('why is the model predicting all the outputs to be the same value?')
-print(trainPredict[0:10])
-
 
 def runRegression(xvars, y):
     X = xvars.reshape(-1,1)
