@@ -4,10 +4,10 @@ from functools import reduce
 """
 List our file paths
 """
-windFold = r"D:\Will_Git\Ozone_ML\Year2\HRRR_Data\wind"
-tempFold = r"D:\Will_Git\Ozone_ML\Year2\HRRR_Data\tempAndRH"
-oFold = r"D:\Will_Git\Ozone_ML\Year2\EPA_Data"
-mFold = r"D:\Will_Git\Ozone_ML\Year2\HRRR_Data\meteorology"
+windFold = r"C:\Users\willy\Documents\GitHub\Ozone_ML\Year2\HRRR_Data\training\wind"
+tempFold = r"C:\Users\willy\Documents\GitHub\Ozone_ML\Year2\HRRR_Data\training\tempAndRH"
+oFold = r"C:\Users\willy\Documents\GitHub\Ozone_ML\Year2\EPA_Data"
+mFold = r"C:\Users\willy\Documents\GitHub\Ozone_ML\Year2\HRRR_Data\training\meteorology"
 
 """
 First we merge everything into one df
@@ -17,9 +17,12 @@ years = ['2021', '2022', '2023']
 months = ['5', '6', '7', '8', '9']
 thirties = ['06', '09']
 thirty1s = ['05', '07', '08']
+# dropping from wind and temp data
 drop = ['step','heightAboveGround','latitude','longitude','valid_time','metpy_crs', 'gribfile_projection','y','x', 'point', 'time_point', 'Unnamed: 0']
+# dropping from ozone data
 drop2 = ['parameter_code', 'poc','datum','parameter', 'detection_limit', 'state_code', 'units_of_measure', 'units_of_measure_code','Unnamed: 0', 'sample_duration', 'sample_duration_code', 'sample_frequency', 'detection_limit', 'uncertainty','qualifier','method_type','method','method_code', 'state', 'date_of_last_change', 'cbsa_code']
-
+# dropping from meteorology data
+drop3 = ['surface', 'surface_x', 'surface_y']
 dfs = {}
 
 for year in years:
@@ -37,7 +40,8 @@ for year in years:
         oDf = pd.read_csv(oPath)
         wDf.drop(labels=drop, axis=1, inplace=True)
         tDf.drop(labels=drop, axis=1, inplace=True)
-        if year != '2023' and (month != '8' or month != '9'):
+        mDf.drop(labels=drop3, axis=1, inplace=True)
+        if True:
             oDf.drop(labels=drop2, axis=1, inplace=True)
             mDf.rename(columns={'unknown_x': 'MAXUVV', 'unknown_y': 'MAXDVV'}, inplace=True)
 
@@ -55,7 +59,22 @@ for year in years:
 
 
 a = pd.concat(dfs.values(), ignore_index=True)
-a.to_csv(r"D:\Will_Git\Ozone_ML\Year2\Merged_Data\merge2.csv")
+# site numbers are not unique, only unique by county. So make a new column for unique sites
+a['site'] = a['site_number'] + a['county_code']
+# I wanna name the sites
+a['site_name'] = 'placeholder'
+a['site_name'].where(a['site'] != 50, other='Idaho Springs', inplace=True)
+a['site_name'].where(a['site'] != 27, other='Boulder', inplace=True)
+a['site_name'].where(a['site'] != 65, other='Rocky Flats', inplace=True)
+a['site_name'].where(a['site'] != 70, other='South Table', inplace=True)
+a['site_name'].where(a['site'] != 57, other='Sunnyside', inplace=True)
+a['site_name'].where(a['site'] != 33, other='Five Points', inplace=True)
+a['site_name'].where(a['site'] != 3002, other='Welby', inplace=True)
+a['site_name'].where(a['site'] != 7, other='Highlands Ranch', inplace=True)
+a['site_name'].where(a['site'] != 39, other='Chatfield Reservoir', inplace=True)
+a['site_name'].where(a['site'] != 11, other='East Plains', inplace=True)
+a['site_name'].where(a['site'] != 73, other='Evergreen', inplace=True)
+a.to_csv(r"C:\Users\willy\Documents\GitHub\Ozone_ML\Year2\Merged_Data\merge3.csv")
 
 
 sites = a['latitude'].unique()

@@ -15,8 +15,6 @@ ozoneCode= '44201'
 params = requests.get(url = "https://aqs.epa.gov/data/api/list/parametersByClass?email={}&key={}&pc=CRITERIA".format(email,key))
 params = params.json()
 
-bdateJuly = '20210101'
-edateJuly = '20211231'
 years = ['2021', '2022', '2023']
 months = ['05', '06', '07', '08', '09']
 thirties = ['06', '09']
@@ -37,4 +35,6 @@ for year in years:
         #"https://aqs.epa.gov/data/api/sampleData/byBox?email=test@aqs.api&key=test&param=44201&bdate=20230701&edate=20230731&minlat=39.259770&maxlat=40.172953&minlon=-105.632996&maxlon=-104.237732"
         do = do['Data']
         do = pd.DataFrame(do)
-        do.to_csv(r"D:\Will_Git\Ozone_ML\Year2\EPA_Data\year{}month{}.csv".format(year, month))
+        do.to_csv(r"C:\Users\willy\Documents\GitHub\Ozone_ML\Year2\EPA_Data\year{}month{}.csv".format(year, month))
+
+test = requests.get('https://aqs.epa.gov/data/api/sampleData/bySite?email={}&key={}&param=44201&bdate=20230501&edate=20230531&state=08&county=031&site=0002'.format(email, key))
