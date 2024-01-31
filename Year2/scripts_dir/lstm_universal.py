@@ -86,10 +86,8 @@ def trainLSTMgpt(ia, da, epochs=25):
     model.add(LSTM(units=32, input_shape=(ia.shape[1], ia.shape[2])))
     model.add(Dropout(0.2))  # Adding 20% dropout
     model.add(Dense(units=1))  # Output layer with 1 neuron for regression task
-
     # Compile the model
     model.compile(optimizer='adam', loss='mean_squared_error')
-
     # Train the model
     model.fit(ia, da, epochs=epochs, batch_size=32)  # Adjust epochs and batch_size as needed
     return model
@@ -314,19 +312,19 @@ def multistep_forecast(model, hours_ahead, input_ia, input_da, input_dates, ozon
         bad_times = time_continuity_test(input_sequence, 10, 11)
         # remove bad times
         input_sequence = input_sequence[bad_times]
-        nextDA_predict = nextDA[bad_times]
-        next_dates_predict = next_dates[bad_times]
+        nextDA = nextDA[bad_times]
+        next_dates = next_dates[bad_times]
         # Predict one step ahead
         predicted_step = model.predict(input_sequence)
         # Update the input sequence for the next prediction
         input_sequence = next_prediction(input_sequence, predicted_step, 0)
         # unNormalize them so you can evaluate
         predictionsUn = unNormalize(predicted_step, rdict['o3'], mdict['o3'])
-        daUn = unNormalize(nextDA_predict, rdict['o3'], mdict['o3'])
+        daUn = unNormalize(nextDA, rdict['o3'], mdict['o3'])
         # evaluate
         evaluate(predictionsUn, daUn)
         # append actuals to list
-        actuals.append(nextDA_predict)
+        actuals.append(nextDA)
         # Append the predicted step to the results
         predictions.append(predicted_step)
         # append the dates
@@ -490,7 +488,7 @@ def split_data(sets, cols, one_hot, timesize):
             # split the independent and dependent arrays
             ia, da, dates = dataPrep(df, timesize, cols, 'o3')
 
-            # if there's a single nan in either of these blow it the fuck up because it won't work
+            # if there's a single nan in either of these blow it up because it won't work
             if np.isnan(ia).any() or np.isnan(da).any():
                 raise ValueError('explode')
             if count == 1: # just verifies this is the training data
@@ -508,8 +506,6 @@ def split_data(sets, cols, one_hot, timesize):
 
     return trainIAs, trainDAs, trainDates, vIAs, vDAs, vDates, tIAs, tDAs, tDates, df_list
 
-aaa = np.where(bad_times==False)
-bad_times.sum()
 
 # Import data
 O3J = pd.read_csv(r"D:\Will_Git\Ozone_ML\Year2\Merged_Data\merge3.csv")
@@ -560,7 +556,7 @@ O3Jn['date'] = pd.to_datetime(O3Jn['datetime']).dt.date
 # train it on 2021 and 2022
 training = O3Jn[O3Jn['date'] < dt.date(year=2023, month=1, day=1)]
 test = [65, 27, 57, 7, 11] # testing sites
-val = [50, 70, 33, 3002, 39, 73] # validation sites
+val = [50, 70, 33, 3002, 39, 73, 65, 27, 57, 7, 11] # validation sites (using all as validation for now)
 validation = O3Jn[(O3Jn['date'] > dt.date(year=2023, month=1, day=1)) & (O3Jn['site'].isin(val))]
 testing = O3Jn[(O3Jn['date'] > dt.date(year=2023, month=1, day=1)) & (O3Jn['site'].isin(test))]
 
@@ -578,7 +574,13 @@ vDA_f_24 = np.hstack(list(vDAs_f_24.values()))
 tIA_f_24 = np.vstack(list(tIAs_f_24.values()))
 tDA_f_24 = np.hstack(list(tDAs_f_24.values()))
 
-trainIA_t_24, trainDA_t_24, vIA_t_24, vDA_t_24, tIA_t_24, tDA_t_24 = split_data(sets, cols, True, 24)
+trainIAs_t_24, trainDAs_t_24, trainDates_t_24, vIAs_t_24, vDAs_t_24, vDates_t_24, tIAs_t_24, tDAs_t_24, tDates_t_24, dfs2 = split_data(sets, cols, True, 24)
+trainIA_t_24 = np.vstack(list(trainIAs_t_24.values()))
+trainDA_t_24 = np.hstack(list(trainDAs_t_24.values()))
+vIA_t_24 = np.vstack(list(vIAs_t_24.values()))
+vDA_t_24 = np.hstack(list(vDAs_t_24.values()))
+tIA_t_24 = np.vstack(list(tIAs_t_24.values()))
+tDA_t_24 = np.hstack(list(tDAs_t_24.values()))
 #ia, da, nans = split_data(sets, cols, False, 24)
 
 #model = runLSTM(trainIA, trainDA, 72, cols=cols, activation='sigmoid', epochs=25, units=32, run_model=True)
@@ -595,41 +597,42 @@ def evalModel(model, valIA, valDA):
 
 evalModel(model_no_one_hot, vIA_f_24, vDA_f_24)
 
-# see how it did just for south table
-st_vIA = vIAs_f_24['South Table'].copy()
-st_vDA = vDAs_f_24['South Table'].copy()
-st_vDates = vDates_f_24['South Table'].copy()
-st_predictedO3 = model_no_one_hot.predict(st_vIA)
-st_predictedO3un = unNormalize(st_predictedO3, rdict['o3'], mdict['o3'])
-st_vDA_un = unNormalize(st_vDA, rdict['o3'], mdict['o3'])
-evaluate(st_predictedO3un, st_vDA_un)
+# # drop ozone from training data and see how it does
+# trainIA_noO3 = np.delete(trainIA, 0, axis=2)
+# vIA_noO3 = np.delete(vIA, 0, axis=2)
 
 # see how it did by site
+merged_dfs = []
 for site in vIAs_f_24.keys():
     print(site)
+    lat = dfs[1][site]['latitude'].max()
+    lon = dfs[1][site]['longitude'].max()
     st_vIA = vIAs_f_24[site].copy()
     st_vDA = vDAs_f_24[site].copy()
-    st_predictedO3 = model_no_one_hot.predict(st_vIA)
-    st_predictedO3un = unNormalize(st_predictedO3, rdict['o3'], mdict['o3'])
-    st_vDA_un = unNormalize(st_vDA, rdict['o3'], mdict['o3'])
-    evaluate(st_predictedO3un, st_vDA_un)
+    st_vDates = vDates_f_24[site].copy()
 
+    # multistep test
+    preds, actuals, dates = multistep_forecast(model_no_one_hot, 6, st_vIA, st_vDA, st_vDates, 0)
 
-# multistep test
-preds, actuals, dates = multistep_forecast(model_no_one_hot, 5, st_vIA, st_vDA, st_vDates, 0)
+    results = {}
 
-results = {}
-for i in range(len(preds)):
-    results[i] = pd.DataFrame()
-    results[i][f'date'] = dates[i]
-    results[i][f'preds_{i}'] = preds[i].flatten()
-    results[i][f'actual_{i}'] = actuals[i]
+    for i in range(len(preds)):
+        results[i] = pd.DataFrame()
+        results[i][f'date'] = dates[i]
+        results[i][f'preds_{i}_{site}'] = preds[i].flatten()
+    # add the actual o3 once
+    results[0]['actual'] = actuals[0]
 
+    from functools import reduce
+    # Use functools.reduce and pd.merge to merge DataFrames on the 'date' column
+    merged_df = reduce(lambda left, right: pd.merge(left, right, on='date'), results.values())
+    merged_df['site_name'] = site
+    merged_df['lat'] = lat
+    merged_df['lon'] = lon
+    merged_dfs.append(merged_df)
+    #merged_df.to_csv(r"D:\Will_Git\Ozone_ML\Year2\results\{}_6hour_24time_n.csv".format(site))
 
-from functools import reduce
-# Use functools.reduce and pd.merge to merge DataFrames on the 'date' column
-merged_df = reduce(lambda left, right: pd.merge(left, right, on='date'), results.values())
-merged_df.to_csv(r"D:\Will_Git\Ozone_ML\Year2\results\southtable_5hour_24time_n.csv")
+merged_df = reduce(lambda left, right: pd.merge(left, right, on='date'), merged_dfs)
 
 for i in range(len(preds)):
     print('hour ' + str(i))
