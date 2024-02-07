@@ -7,6 +7,6 @@ res = r"D:\Will_Git\Ozone_ML\Year2\results\southtable_5hour_24time_n.csv"
 
 df = pd.read_csv(res)
 df['date'] =pd.to_datetime(df['date'], utc=False)
-filtered_df = df[df['date'] > '2023-09-15']
+filtered_df = df[df['date'] < '2023-07-15']
 plotLines(filtered_df, 'date', yaxis='preds_4', yaxis2='actual_4')
 

@@ -237,13 +237,15 @@ def evaluate(actual, pred):
     model1 = LinearRegression()
     model1.fit(X, y)
 
-    r_sq = model1.score(X, y)
-    print(f"r2: {r_sq}")
+    rsq = model1.score(X, y)
+    print(f"r2: {rsq}")
 
     rms = mean_squared_error(actual, pred, squared=False)
     print(f"rmse: {rms}")
 
-    nseVal = nse(pred, actual)
+    return rms, rsq
+
+    #nseVal = nse(pred, actual)
     #print('coefficients '+ str(model1.coef_))
     #print('intercept '+ str(model1.intercept_))
 
@@ -306,8 +308,10 @@ def multistep_forecast(model, hours_ahead, input_ia, input_da, input_dates, ozon
     predictions = []
     actuals = []
     dates = []
-    for _ in range(hours_ahead):
-        print(f'predicting {_} hours ahead')
+    metrics_rms = {}
+    metrics_rsq = {}
+    for i in range(hours_ahead):
+        print(f'predicting {i} hours ahead')
         # test for time continuity. Some arrays will not be time continuous because of missing data. Remove them.
         bad_times = time_continuity_test(input_sequence, 10, 11)
         # remove bad times
@@ -322,7 +326,9 @@ def multistep_forecast(model, hours_ahead, input_ia, input_da, input_dates, ozon
         predictionsUn = unNormalize(predicted_step, rdict['o3'], mdict['o3'])
         daUn = unNormalize(nextDA, rdict['o3'], mdict['o3'])
         # evaluate
-        evaluate(predictionsUn, daUn)
+        rms, rsq = evaluate(predictionsUn, daUn)
+        metrics_rms[f'rms{i}'] = rms
+        metrics_rsq[f'rsq{i}'] = rsq
         # append actuals to list
         actuals.append(nextDA)
         # Append the predicted step to the results
@@ -333,7 +339,7 @@ def multistep_forecast(model, hours_ahead, input_ia, input_da, input_dates, ozon
         nextDA = next_DA(nextDA)
         # get next dates
         next_dates = next_DA(next_dates)
-    return predictions, actuals, dates
+    return predictions, actuals, dates, metrics_rms, metrics_rsq
 
 def next_prediction(input_array, predictions, column):
     """
@@ -449,7 +455,12 @@ def time_continuity_test(ia, day_col, hour_col):
 
 # bad_times = time_continuity_test(vIAs_f_24['Evergreen'], 10, 11)
 # lastDay, lastHour = time_continuity_test(vIAs_f_24['Evergreen'], 10, 11)
-
+def evalModel(model, valIA, valDA):
+    predictedO3 = model.predict(valIA)
+    predictedO3un = unNormalize(predictedO3, rdict['o3'], mdict['o3'])
+    vDA_un = unNormalize(valDA, rdict['o3'], mdict['o3'])
+    evaluate(predictedO3un, vDA_un)
+    return predictedO3un, vDA_un
 
 def split_data(sets, cols, one_hot, timesize):
     trainIAs = {}
@@ -584,17 +595,10 @@ tDA_t_24 = np.hstack(list(tDAs_t_24.values()))
 #ia, da, nans = split_data(sets, cols, False, 24)
 
 #model = runLSTM(trainIA, trainDA, 72, cols=cols, activation='sigmoid', epochs=25, units=32, run_model=True)
-#model_one_hot = trainLSTMgpt(trainIA_t_24, trainDA_t_24)
-model_no_one_hot = trainLSTMgpt(trainIA_f_24, trainDA_f_24)
+model_one_hot = trainLSTMgpt(trainIA_t_24, trainDA_t_24)
+model_no_one_hot = trainLSTMgpt(trainIA_f_24, trainDA_f_24, epochs=25)
 
 # see how it did on validation for all the places
-def evalModel(model, valIA, valDA):
-    predictedO3 = model.predict(valIA)
-    predictedO3un = unNormalize(predictedO3, rdict['o3'], mdict['o3'])
-    vDA_un = unNormalize(valDA, rdict['o3'], mdict['o3'])
-    evaluate(predictedO3un, vDA_un)
-    return predictedO3un, vDA_un
-
 evalModel(model_no_one_hot, vIA_f_24, vDA_f_24)
 
 # # drop ozone from training data and see how it does
@@ -603,25 +607,34 @@ evalModel(model_no_one_hot, vIA_f_24, vDA_f_24)
 
 # see how it did by site
 merged_dfs = []
-for site in vIAs_f_24.keys():
+metricsList = []
+rm = pd.DataFrame()
+for site in vIAs_t_24.keys():
     print(site)
     lat = dfs[1][site]['latitude'].max()
     lon = dfs[1][site]['longitude'].max()
-    st_vIA = vIAs_f_24[site].copy()
-    st_vDA = vDAs_f_24[site].copy()
-    st_vDates = vDates_f_24[site].copy()
+    st_vIA = vIAs_t_24[site].copy()
+    st_vDA = vDAs_t_24[site].copy()
+    st_vDates = vDates_t_24[site].copy()
 
     # multistep test
-    preds, actuals, dates = multistep_forecast(model_no_one_hot, 6, st_vIA, st_vDA, st_vDates, 0)
+    metrics = {}
+    metrics['site'] = site
+    preds, actuals, dates, rms_d, rsq_d = multistep_forecast(model_one_hot, 6, st_vIA, st_vDA, st_vDates, 0)
+    for i in rms_d.keys():
+        metrics[i] = rms_d[i]
+    for j in rsq_d.keys():
+        metrics[j] = rsq_d[j]
+    metricsList.append(metrics)
 
     results = {}
-
     for i in range(len(preds)):
         results[i] = pd.DataFrame()
         results[i][f'date'] = dates[i]
-        results[i][f'preds_{i}_{site}'] = preds[i].flatten()
+        uP = unNormalize(preds[i], rdict['o3'], mdict['o3'])
+        results[i][f'preds_{i}_{site}'] = uP.flatten()
     # add the actual o3 once
-    results[0]['actual'] = actuals[0]
+    results[0]['actual'] = unNormalize(actuals[0], rdict['o3'], mdict['o3'])
 
     from functools import reduce
     # Use functools.reduce and pd.merge to merge DataFrames on the 'date' column
@@ -630,7 +643,10 @@ for site in vIAs_f_24.keys():
     merged_df['lat'] = lat
     merged_df['lon'] = lon
     merged_dfs.append(merged_df)
-    #merged_df.to_csv(r"D:\Will_Git\Ozone_ML\Year2\results\{}_6hour_24time_n.csv".format(site))
+    merged_df.to_csv(r"D:\Will_Git\Ozone_ML\Year2\results\universal_one_hot\{}_6hour_24time_n.csv".format(site))
+
+df = pd.DataFrame(metricsList)
+df.to_csv(r"D:\Will_Git\Ozone_ML\Year2\results\aggregated_metrics\universal_one_hot.csv")
 
 merged_df = reduce(lambda left, right: pd.merge(left, right, on='date'), merged_dfs)
 
@@ -651,15 +667,6 @@ for i in range(len(preds)):
 
     # Show the plot
     plt.show()
-
-
-
-
-
-
-
-
-
 
 '''configure the model'''
 timesize = 26 ##e.g., past 6 hours
@@ -702,7 +709,6 @@ for station in dtownDen:
     trains.append(trainPredict)
 
 
-#
 for i in range(len(outputs)):
     print('latitude of station{}'.format(stations[i]))
     runRegression(xvars=outputs[i], y=trains[i])
