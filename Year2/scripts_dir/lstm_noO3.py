@@ -595,13 +595,13 @@ tDA_t_24 = np.hstack(list(tDAs_t_24.values()))
 #ia, da, nans = split_data(sets, cols, False, 24)
 
 #model = runLSTM(trainIA, trainDA, 72, cols=cols, activation='sigmoid', epochs=25, units=32, run_model=True)
-#model_one_hot = trainLSTMgpt(trainIA_t_24, trainDA_t_24)
+
 
 # drop ozone from training data and see how it does
-trainIA_noO3 = np.delete(trainIA_f_24, 0, axis=2)
-vIA_noO3 = np.delete(vIA_f_24, 0, axis=2)
-model_no_one_hot = trainLSTMgpt(trainIA_noO3, trainDA_f_24)
-
+trainIA_noO3 = np.delete(trainIA_t_24, 0, axis=2)
+vIA_noO3 = np.delete(vIA_t_24, 0, axis=2)
+#model_no_one_hot = trainLSTMgpt(trainIA_noO3, trainDA_f_24)
+model_one_hot = trainLSTMgpt(trainIA_t_24, trainDA_t_24)
 # see how it did on validation for all the places
 def evalModel(model, valIA, valDA):
     predictedO3 = model.predict(valIA)
@@ -610,32 +610,40 @@ def evalModel(model, valIA, valDA):
     evaluate(predictedO3un, vDA_un)
     #return predictedO3un, vDA_un
 
-evalModel(model_no_one_hot, vIA_noO3, vDA_f_24)
+evalModel(model_one_hot, vIA_noO3, vDA_f_24)
 
 
+# test it's accuracy
 # see how it did by site
 merged_dfs = []
+metricsList = []
+rm = pd.DataFrame()
 for site in vIAs_f_24.keys():
     print(site)
-
     lat = dfs[1][site]['latitude'].max()
     lon = dfs[1][site]['longitude'].max()
     st_vIA = vIAs_f_24[site].copy()
     st_vDA = vDAs_f_24[site].copy()
-    # drop ozone from each
-    st_vIA = np.delete(st_vIA, 0, axis=2)
     st_vDates = vDates_f_24[site].copy()
+
     # multistep test
-    preds, actuals, dates = multistep_forecast(model_no_one_hot, 5, st_vIA, st_vDA, st_vDates, ozone_column=None)
+    metrics = {}
+    metrics['site'] = site
+    preds, actuals, dates, rms_d, rsq_d = multistep_forecast(models[site], 6, st_vIA, st_vDA, st_vDates, 0, rdict, mdict)
+    for i in rms_d.keys():
+        metrics[i] = rms_d[i]
+    for j in rsq_d.keys():
+        metrics[j] = rsq_d[j]
+    metricsList.append(metrics)
 
     results = {}
-
     for i in range(len(preds)):
         results[i] = pd.DataFrame()
         results[i][f'date'] = dates[i]
-        results[i][f'preds_{i}_{site}'] = preds[i].flatten()
+        uP = unNormalize(preds[i], rdict['o3'], mdict['o3'])
+        results[i][f'preds_{i}_{site}'] = uP.flatten()
     # add the actual o3 once
-    results[0]['actual'] = actuals[0]
+    results[0]['actual'] = unNormalize(actuals[0], rdict['o3'], mdict['o3'])
 
     from functools import reduce
     # Use functools.reduce and pd.merge to merge DataFrames on the 'date' column
@@ -644,6 +652,7 @@ for site in vIAs_f_24.keys():
     merged_df['lat'] = lat
     merged_df['lon'] = lon
     merged_dfs.append(merged_df)
-    #merged_df.to_csv(r"D:\Will_Git\Ozone_ML\Year2\results\{}_6hour_24time_n.csv".format(site))
+    merged_df.to_csv(r"D:\Will_Git\Ozone_ML\Year2\results\by_site\{}_6hour_24time_n.csv".format(site))
 
-merged_df = reduce(lambda left, right: pd.merge(left, right, on='date'), merged_dfs)
+metrics_df = pd.DataFrame(metricsList)
+metrics_df.to_csv(r"D:\Will_Git\Ozone_ML\Year2\results\aggregated_metrics\by_site.csv")

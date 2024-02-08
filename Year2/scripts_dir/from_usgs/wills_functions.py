@@ -69,7 +69,7 @@ def plotScat(df, xaxis, yaxis, yaxisLabel=None, filt = None, yaxis2 = None, xaxi
         else:
             p_value = str(round_to_1(p_value))
         ax.annotate('$R^2$ = ' + str(r_value**2)[0:4], (df[xaxis].median() +annotate_shift,df[yaxis].max()), **tsfont)
-
+    ax.legend(loc='upper left', frameon=True)
     # make the title
     plt.title(title, **tsfont)
     fig = plt.gcf()
@@ -77,8 +77,6 @@ def plotScat(df, xaxis, yaxis, yaxisLabel=None, filt = None, yaxis2 = None, xaxi
     if saveDir:
         plt.savefig(os.path.join(saveDir, yaxis + '_vs_' + xaxis + '.png'))
     plt.show()
-
-
 
 def plotLines(df, xaxis, yaxis, yaxisLabel = None, filt = None, yaxis2 = None, yaxis2Label = None, yaxis3=None, yaxis3Label=None, changeYlim=None, title = None, linreg=False, dateSpacing=3, logY=False,annotate_shift=0, sameY=False, saveDir=None):
     df = df.dropna() # gotta drop na to get a regression line

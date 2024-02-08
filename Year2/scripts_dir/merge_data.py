@@ -4,10 +4,11 @@ from functools import reduce
 """
 List our file paths
 """
-windFold = r"C:\Users\willy\Documents\GitHub\Ozone_ML\Year2\HRRR_Data\training\wind"
-tempFold = r"C:\Users\willy\Documents\GitHub\Ozone_ML\Year2\HRRR_Data\training\tempAndRH"
-oFold = r"C:\Users\willy\Documents\GitHub\Ozone_ML\Year2\EPA_Data"
-mFold = r"C:\Users\willy\Documents\GitHub\Ozone_ML\Year2\HRRR_Data\training\meteorology"
+baseDir = r'D:\Will_Git\Ozone_ML'
+windFold = fr"{baseDir}\Year2\HRRR_Data\training\wind"
+tempFold = fr"{baseDir}\Year2\HRRR_Data\training\tempAndRH"
+oFold = fr"{baseDir}\Year2\EPA_Data"
+mFold = fr"{baseDir}\Year2\HRRR_Data\training\meteorology"
 
 """
 First we merge everything into one df
@@ -24,6 +25,7 @@ drop2 = ['parameter_code', 'poc','datum','parameter', 'detection_limit', 'state_
 # dropping from meteorology data
 drop3 = ['surface', 'surface_x', 'surface_y']
 dfs = {}
+
 
 for year in years:
     for month in months:
@@ -59,8 +61,21 @@ for year in years:
 
 
 a = pd.concat(dfs.values(), ignore_index=True)
+
+# read in population data
+pop_df = pd.read_csv(r"D:\Will_Git\Ozone_ML\Year2\BasicGIS\Pop_Den_O3.csv")
+pop_df['site'] = pop_df['site_numbe'] + pop_df['county_cod']
+pop_drop = []
+for col in pop_df.columns:
+    if 'RASTERVALU' not in col and col != 'site':
+        pop_drop.append(col)
+pop_df.drop(labels=pop_drop, axis=1, inplace=True)
+pop_df.rename({'RASTERVALU': 'pop_den'}, inplace=True)
+
 # site numbers are not unique, only unique by county. So make a new column for unique sites
 a['site'] = a['site_number'] + a['county_code']
+# merge pop den with other data
+test = a.merge(pop_df, on='site', how='inner')
 # I wanna name the sites
 a['site_name'] = 'placeholder'
 a['site_name'].where(a['site'] != 50, other='Idaho Springs', inplace=True)
@@ -74,7 +89,7 @@ a['site_name'].where(a['site'] != 7, other='Highlands Ranch', inplace=True)
 a['site_name'].where(a['site'] != 39, other='Chatfield Reservoir', inplace=True)
 a['site_name'].where(a['site'] != 11, other='East Plains', inplace=True)
 a['site_name'].where(a['site'] != 73, other='Evergreen', inplace=True)
-a.to_csv(r"C:\Users\willy\Documents\GitHub\Ozone_ML\Year2\Merged_Data\merge3.csv")
+a.to_csv(fr"{baseDir}\Year2\Merged_Data\merge4.csv")
 
 
 sites = a['latitude'].unique()

@@ -208,3 +208,6 @@ for site in vIAs_f_24.keys():
     merged_df['lon'] = lon
     merged_dfs.append(merged_df)
     merged_df.to_csv(r"D:\Will_Git\Ozone_ML\Year2\results\by_site\{}_6hour_24time_n.csv".format(site))
+
+metrics_df = pd.DataFrame(metricsList)
+metrics_df.to_csv(r"D:\Will_Git\Ozone_ML\Year2\results\aggregated_metrics\by_site.csv")

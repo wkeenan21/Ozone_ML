@@ -16,7 +16,10 @@ import scipy.stats
 import sklearn.preprocessing as sk
 #import seaborn as sn
 from sklearn.metrics import mean_squared_error
-
+import sys
+sys.path.append(r"D:\Will_Git\Ozone_ML\Year2\scripts_dir")
+# import a bajillion functions from my other script
+from lstm_functions import *
 
 
 # this function normalizes all the variables to be between zero and 1
@@ -62,24 +65,24 @@ def unNormalize_ar(ar, mean, std):
     # unnormalize an array
     ar2 = (ar * std) + mean
     return ar2
-
-# where the magic happens
-def runLSTM(ind_arr, dep_arr, timesize, cols, activation, epochs, units=10, run_model=True):
-    '''configure the model'''
-    input_var_cnt = len(cols) ##the number of variables used to perform prediction
-    input_lstm = Input(shape=(timesize, input_var_cnt)) ##what is the input for every sample, sample count is not included every sample should be a 2D matrix
-    ##prepare a LSTM layer
-    unit_lstm = units ##hidden dimensions transfer data, larger more complex model
-    lstmlayer = LSTM(unit_lstm, activation=activation) (input_lstm) ##this outputs a matrix of 1*unit_lstm, the format is the layer (input), the output of the layer stores the time series info and the interaction of variables..
-    denselayer = Dense(1)(lstmlayer) ## reduce the hidden dimension to 1 ==== output data ,1 value for 1 input sample
-    model = Model(inputs = input_lstm, outputs = denselayer)
-    model.add(Dropout(0.2)) # 20% of the neurons get ignored at random times to prevent overfitting
-    model.compile(loss='mse', optimizer='adam') ##how to measure the accuracy  compute mean squared error using all y_pred, y_true
-
-    # now fit the model
-    if run_model:
-        model.fit(ind_arr, dep_arr, epochs=epochs, batch_size=32, verbose=2)
-        return model
+#
+# # where the magic happens
+# def runLSTM(ind_arr, dep_arr, timesize, cols, activation, epochs, units=10, run_model=True):
+#     '''configure the model'''
+#     input_var_cnt = len(cols) ##the number of variables used to perform prediction
+#     input_lstm = Input(shape=(timesize, input_var_cnt)) ##what is the input for every sample, sample count is not included every sample should be a 2D matrix
+#     ##prepare a LSTM layer
+#     unit_lstm = units ##hidden dimensions transfer data, larger more complex model
+#     lstmlayer = LSTM(unit_lstm, activation=activation) (input_lstm) ##this outputs a matrix of 1*unit_lstm, the format is the layer (input), the output of the layer stores the time series info and the interaction of variables..
+#     denselayer = Dense(1)(lstmlayer) ## reduce the hidden dimension to 1 ==== output data ,1 value for 1 input sample
+#     model = Model(inputs = input_lstm, outputs = denselayer)
+#     model.add(Dropout(0.2)) # 20% of the neurons get ignored at random times to prevent overfitting
+#     model.compile(loss='mse', optimizer='adam') ##how to measure the accuracy  compute mean squared error using all y_pred, y_true
+#
+#     # now fit the model
+#     if run_model:
+#         model.fit(ind_arr, dep_arr, epochs=epochs, batch_size=32, verbose=2)
+#         return model
 
 def trainLSTMgpt(ia, da, epochs=25):
     model = Sequential()
@@ -462,7 +465,7 @@ def evalModel(model, valIA, valDA):
     evaluate(predictedO3un, vDA_un)
     return predictedO3un, vDA_un
 
-def split_data(sets, cols, one_hot, timesize):
+def split_data(O3Jn, sets, cols, one_hot, timesize):
     trainIAs = {}
     trainDAs = {}
     trainDates = {}
@@ -534,9 +537,9 @@ O3J['datetime'] = pd.to_datetime(O3J['datetime'], utc=False)
 # O3J.set_index('datetime', inplace=True)
 # O3J.index = O3J['datetime'].tz_convert('America/Denver')
 
-# remove values that are zero (never 0 ozone in the atmosphere)
-fifthP = O3J['o3'].quantile(q=0.05)
-O3J['o3'].where(O3J['o3'] > 0, other=fifthP, inplace=True)
+# remove values that are zero (never 0 ozone in the atmosphere). They will be interpolated later
+#fifthP = O3J['o3'].quantile(q=0.05)
+O3J['o3'].where(O3J['o3'] > 0, other=np.nan, inplace=True)
 # fill missing hours
 dfs = dict(tuple(O3J.groupby('site_name')))
 new_dfs = []
@@ -575,7 +578,7 @@ testing = O3Jn[(O3Jn['date'] > dt.date(year=2023, month=1, day=1)) & (O3Jn['site
 sets = [training, validation, testing]
 
 # split the data by training, val, and testing
-trainIAs_f_24, trainDAs_f_24, trainDates_f_24, vIAs_f_24, vDAs_f_24, vDates_f_24, tIAs_f_24, tDAs_f_24, tDates_f_24, dfs = split_data(sets, cols, False, 24)
+trainIAs_f_24, trainDAs_f_24, trainDates_f_24, vIAs_f_24, vDAs_f_24, vDates_f_24, tIAs_f_24, tDAs_f_24, tDates_f_24, dfs = split_data(O3Jn, sets, cols, False, 24)
 
 # stack them into big arrays for training the universal model
 trainIA_f_24 = np.vstack(list(trainIAs_f_24.values()))
@@ -585,7 +588,7 @@ vDA_f_24 = np.hstack(list(vDAs_f_24.values()))
 tIA_f_24 = np.vstack(list(tIAs_f_24.values()))
 tDA_f_24 = np.hstack(list(tDAs_f_24.values()))
 
-trainIAs_t_24, trainDAs_t_24, trainDates_t_24, vIAs_t_24, vDAs_t_24, vDates_t_24, tIAs_t_24, tDAs_t_24, tDates_t_24, dfs2 = split_data(sets, cols, True, 24)
+trainIAs_t_24, trainDAs_t_24, trainDates_t_24, vIAs_t_24, vDAs_t_24, vDates_t_24, tIAs_t_24, tDAs_t_24, tDates_t_24, dfs2 = split_data(O3Jn, sets, cols, True, 24)
 trainIA_t_24 = np.vstack(list(trainIAs_t_24.values()))
 trainDA_t_24 = np.hstack(list(trainDAs_t_24.values()))
 vIA_t_24 = np.vstack(list(vIAs_t_24.values()))
@@ -643,12 +646,17 @@ for site in vIAs_t_24.keys():
     merged_df['lat'] = lat
     merged_df['lon'] = lon
     merged_dfs.append(merged_df)
-    merged_df.to_csv(r"D:\Will_Git\Ozone_ML\Year2\results\universal_one_hot\{}_6hour_24time_n.csv".format(site))
+    #merged_df.to_csv(r"D:\Will_Git\Ozone_ML\Year2\results\universal_one_hot\{}_6hour_24time_n.csv".format(site))
 
 df = pd.DataFrame(metricsList)
 df.to_csv(r"D:\Will_Git\Ozone_ML\Year2\results\aggregated_metrics\universal_one_hot.csv")
 
 merged_df = reduce(lambda left, right: pd.merge(left, right, on='date'), merged_dfs)
+
+
+
+
+
 
 for i in range(len(preds)):
     print('hour ' + str(i))

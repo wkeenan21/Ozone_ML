@@ -37,4 +37,5 @@ for year in years:
         do = pd.DataFrame(do)
         do.to_csv(r"C:\Users\willy\Documents\GitHub\Ozone_ML\Year2\EPA_Data\year{}month{}.csv".format(year, month))
 
-test = requests.get('https://aqs.epa.gov/data/api/sampleData/bySite?email={}&key={}&param=44201&bdate=20230501&edate=20230531&state=08&county=031&site=0002'.format(email, key))
+test = requests.get('https://aqs.epa.gov/data/api/sampleData/bySite?email={}&key={}&param=44201&bdate=20230601&edate=20230630&state=08&county=005&site=0002'.format(email, key))
+

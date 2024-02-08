@@ -81,15 +81,15 @@ def runLSTM(ind_arr, dep_arr, timesize, cols, activation, epochs, units=10, run_
         model.fit(ind_arr, dep_arr, epochs=epochs, batch_size=32, verbose=2)
         return model
 
-def trainLSTMgpt(ia, da, epochs=25):
+def trainLSTMgpt(ia, da, epochs=25, units=32, drop=0.2, batch=32):
     model = Sequential()
-    model.add(LSTM(units=32, input_shape=(ia.shape[1], ia.shape[2])))
-    model.add(Dropout(0.2))  # Adding 20% dropout
+    model.add(LSTM(units=units, input_shape=(ia.shape[1], ia.shape[2])))
+    model.add(Dropout(drop))  # Adding 20% dropout
     model.add(Dense(units=1))  # Output layer with 1 neuron for regression task
     # Compile the model
     model.compile(optimizer='adam', loss='mean_squared_error')
     # Train the model
-    model.fit(ia, da, epochs=epochs, batch_size=32)  # Adjust epochs and batch_size as needed
+    model.fit(ia, da, epochs=epochs, batch_size=batch)  # Adjust epochs and batch_size as needed
     return model
 
 def add_time_columns(df, datetime_column_name):
@@ -313,7 +313,7 @@ def multistep_forecast(model, hours_ahead, input_ia, input_da, input_dates, ozon
     for i in range(hours_ahead):
         print(f'predicting {i} hours ahead')
         # test for time continuity. Some arrays will not be time continuous because of missing data. Remove them.
-        bad_times = time_continuity_test(input_sequence, 10, 11)
+        bad_times = time_continuity_test(input_sequence, 10, 11, rdict, mdict)
         # remove bad times
         input_sequence = input_sequence[bad_times]
         nextDA = nextDA[bad_times]
@@ -439,7 +439,7 @@ def is_sequential_hourly(series):
     is_sequential = hourly_check.all()
     return is_sequential
 
-def time_continuity_test(ia, day_col, hour_col):
+def time_continuity_test(ia, day_col, hour_col, rdict, mdict):
     bad_dates = []
     print('testing time continuity')
     for band in range(ia.shape[0]):
@@ -450,6 +450,8 @@ def time_continuity_test(ia, day_col, hour_col):
         series = combine_hour_day_to_datetime(hours, days, 2020)
         if not is_sequential_hourly(series):
             bad_dates.append(band)
+    if len(bad_dates) == 0:
+        print('no bad dates found')
     bad_times = boolean_array_from_3d_with_false(ia, bad_dates)
     return bad_times
 
@@ -462,7 +464,7 @@ def evalModel(model, valIA, valDA):
     evaluate(predictedO3un, vDA_un)
     return predictedO3un, vDA_un
 
-def split_data(sets, cols, one_hot, timesize):
+def split_data(O3Jn, sets, cols, one_hot, timesize):
     trainIAs = {}
     trainDAs = {}
     trainDates = {}
