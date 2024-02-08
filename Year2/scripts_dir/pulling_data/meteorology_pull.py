@@ -8,7 +8,7 @@ from herbie import FastHerbie
 import pandas as pd
 import os
 # Gets the EPA ozone sites
-sites = pd.read_csv(r"D:\Will_Git\Ozone_ML\Year2\BasicGIS\10km_grid.csv")
+sites = pd.read_csv(r"/Year2/BasicGIS/10km_grid.csv")
 toDrop = []
 for col in sites.columns:
     if 'FID' != col and 'latitude' not in col and 'longitude' not in col:

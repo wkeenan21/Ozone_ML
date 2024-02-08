@@ -9,7 +9,7 @@ import pandas as pd
 import os
 baseDir = r"D:\Will_Git\Ozone_ML\Year2\HRRR_Data\testing\wind"
 # Gets the EPA ozone sites
-sites = pd.read_csv(r"D:\Will_Git\Ozone_ML\Year2\BasicGIS\10km_grid.csv")
+sites = pd.read_csv(r"/Year2/BasicGIS/10km_grid.csv")
 toDrop = []
 for col in sites.columns:
     if 'FID' != col and 'latitude' not in col and 'longitude' not in col:
@@ -40,7 +40,7 @@ for year in years:
                 try:
                     print(day)
                     hours = pd.date_range(start=day, periods=24, freq="1H",)
-                    FH = FastHerbie(hours, model="hrrr", fxx=range(0,6), save_dir=r"D:\Will_Git\Ozone_ML\hrrr")
+                    FH = FastHerbie(hours, model="hrrr", fxx=range(0,6), save_dir=r"/hrrr")
                     print('getting {}'.format(day))
                     #ds = FH.xarray(":(?:TMP|RH):2 m", remove_grib=True)
                     ds = FH.xarray(":[U|V]GRD:10 m", remove_grib=False)

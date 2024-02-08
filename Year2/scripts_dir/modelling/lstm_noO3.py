@@ -519,7 +519,7 @@ def split_data(sets, cols, one_hot, timesize):
 
 
 # Import data
-O3J = pd.read_csv(r"D:\Will_Git\Ozone_ML\Year2\Merged_Data\merge3.csv")
+O3J = pd.read_csv(r"/Year2/Merged_Data/merge3.csv")
 # do some preprocessing
 # remove columns
 remove = []

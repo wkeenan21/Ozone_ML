@@ -1,5 +1,5 @@
 import sys
-sys.path.append(r"D:\Will_Git\Ozone_ML\Year2\scripts_dir")
+sys.path.append(r"/Year2/scripts_dir")
 # import a bajillion functions from my other script
 from lstm_functions import *
 
@@ -85,7 +85,7 @@ def time_continuity_test(ia, day_col, hour_col, rdict, mdict):
 
 
 # Import data
-O3J = pd.read_csv(r"D:\Will_Git\Ozone_ML\Year2\Merged_Data\merge3.csv")
+O3J = pd.read_csv(r"/Year2/Merged_Data/merge3.csv")
 # do some preprocessing
 # remove columns
 remove = []
