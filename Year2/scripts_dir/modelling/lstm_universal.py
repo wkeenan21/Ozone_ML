@@ -19,7 +19,7 @@ from sklearn.metrics import mean_squared_error
 import sys
 sys.path.append(r"/Year2/scripts_dir")
 # import a bajillion functions from my other script
-from lstm_functions import *
+#from lstm_functions import *
 
 
 # this function normalizes all the variables to be between zero and 1
@@ -84,15 +84,20 @@ def unNormalize_ar(ar, mean, std):
 #         model.fit(ind_arr, dep_arr, epochs=epochs, batch_size=32, verbose=2)
 #         return model
 
-def trainLSTMgpt(ia, da, epochs=25):
+def trainLSTMgpt(ia, da, epochs=25, units=64, drop=0.2, batch=64, layers=0):
     model = Sequential()
-    model.add(LSTM(units=32, input_shape=(ia.shape[1], ia.shape[2])))
-    model.add(Dropout(0.2))  # Adding 20% dropout
+    if layers > 0:
+        for i in range(layers):
+            model.add(LSTM(units=units, input_shape=(ia.shape[1], ia.shape[2]), return_sequences=True))
+        model.add(LSTM(units=units, input_shape=(ia.shape[1], ia.shape[2])))
+    else:
+        model.add(LSTM(units=units, input_shape=(ia.shape[1], ia.shape[2])))
+    model.add(Dropout(drop))  # Adding 20% dropout
     model.add(Dense(units=1))  # Output layer with 1 neuron for regression task
     # Compile the model
     model.compile(optimizer='adam', loss='mean_squared_error')
     # Train the model
-    model.fit(ia, da, epochs=epochs, batch_size=32)  # Adjust epochs and batch_size as needed
+    model.fit(ia, da, epochs=epochs, batch_size=batch)  # Adjust epochs and batch_size as needed
     return model
 
 def add_time_columns(df, datetime_column_name):
@@ -520,9 +525,10 @@ def split_data(O3Jn, sets, cols, one_hot, timesize):
 
     return trainIAs, trainDAs, trainDates, vIAs, vDAs, vDates, tIAs, tDAs, tDates, df_list
 
-
+# define base dir
+baseDir = r"D:\Will_Git\Ozone_ML"
 # Import data
-O3J = pd.read_csv(r"/Year2/Merged_Data/merge3.csv")
+O3J = pd.read_csv(fr"{baseDir}/Year2/Merged_Data/merge4.csv")
 # do some preprocessing
 # remove columns
 remove = []
@@ -538,8 +544,8 @@ O3J['datetime'] = pd.to_datetime(O3J['datetime'], utc=False)
 # O3J.index = O3J['datetime'].tz_convert('America/Denver')
 
 # remove values that are zero (never 0 ozone in the atmosphere). They will be interpolated later
-#fifthP = O3J['o3'].quantile(q=0.05)
 O3J['o3'].where(O3J['o3'] > 0, other=np.nan, inplace=True)
+#fifthP = O3J['o3'].quantile(q=0.05)
 # fill missing hours
 dfs = dict(tuple(O3J.groupby('site_name')))
 new_dfs = []
@@ -578,15 +584,15 @@ testing = O3Jn[(O3Jn['date'] > dt.date(year=2023, month=1, day=1)) & (O3Jn['site
 sets = [training, validation, testing]
 
 # split the data by training, val, and testing
-trainIAs_f_24, trainDAs_f_24, trainDates_f_24, vIAs_f_24, vDAs_f_24, vDates_f_24, tIAs_f_24, tDAs_f_24, tDates_f_24, dfs = split_data(O3Jn, sets, cols, False, 24)
+#trainIAs_f_24, trainDAs_f_24, trainDates_f_24, vIAs_f_24, vDAs_f_24, vDates_f_24, tIAs_f_24, tDAs_f_24, tDates_f_24, dfs = split_data(O3Jn, sets, cols, False, 24)
 
-# stack them into big arrays for training the universal model
-trainIA_f_24 = np.vstack(list(trainIAs_f_24.values()))
-trainDA_f_24 = np.hstack(list(trainDAs_f_24.values()))
-vIA_f_24 = np.vstack(list(vIAs_f_24.values()))
-vDA_f_24 = np.hstack(list(vDAs_f_24.values()))
-tIA_f_24 = np.vstack(list(tIAs_f_24.values()))
-tDA_f_24 = np.hstack(list(tDAs_f_24.values()))
+# # stack them into big arrays for training the universal model
+# trainIA_f_24 = np.vstack(list(trainIAs_f_24.values()))
+# trainDA_f_24 = np.hstack(list(trainDAs_f_24.values()))
+# vIA_f_24 = np.vstack(list(vIAs_f_24.values()))
+# vDA_f_24 = np.hstack(list(vDAs_f_24.values()))
+# tIA_f_24 = np.vstack(list(tIAs_f_24.values()))
+# tDA_f_24 = np.hstack(list(tDAs_f_24.values()))
 
 trainIAs_t_24, trainDAs_t_24, trainDates_t_24, vIAs_t_24, vDAs_t_24, vDates_t_24, tIAs_t_24, tDAs_t_24, tDates_t_24, dfs2 = split_data(O3Jn, sets, cols, True, 24)
 trainIA_t_24 = np.vstack(list(trainIAs_t_24.values()))
@@ -598,11 +604,8 @@ tDA_t_24 = np.hstack(list(tDAs_t_24.values()))
 #ia, da, nans = split_data(sets, cols, False, 24)
 
 #model = runLSTM(trainIA, trainDA, 72, cols=cols, activation='sigmoid', epochs=25, units=32, run_model=True)
-model_one_hot = trainLSTMgpt(trainIA_t_24, trainDA_t_24)
-model_no_one_hot = trainLSTMgpt(trainIA_f_24, trainDA_f_24, epochs=25)
-
-# see how it did on validation for all the places
-evalModel(model_no_one_hot, vIA_f_24, vDA_f_24)
+model_one_hot = trainLSTMgpt(trainIA_t_24, trainDA_t_24, epochs=50, layers=3)
+#model_no_one_hot = trainLSTMgpt(trainIA_f_24, trainDA_f_24, epochs=25)
 
 # # drop ozone from training data and see how it does
 # trainIA_noO3 = np.delete(trainIA, 0, axis=2)
@@ -614,8 +617,8 @@ metricsList = []
 rm = pd.DataFrame()
 for site in vIAs_t_24.keys():
     print(site)
-    lat = dfs[1][site]['latitude'].max()
-    lon = dfs[1][site]['longitude'].max()
+    lat = dfs[site]['latitude'].max()
+    lon = dfs[site]['longitude'].max()
     st_vIA = vIAs_t_24[site].copy()
     st_vDA = vDAs_t_24[site].copy()
     st_vDates = vDates_t_24[site].copy()
@@ -623,7 +626,7 @@ for site in vIAs_t_24.keys():
     # multistep test
     metrics = {}
     metrics['site'] = site
-    preds, actuals, dates, rms_d, rsq_d = multistep_forecast(model_one_hot, 6, st_vIA, st_vDA, st_vDates, 0)
+    preds, actuals, dates, rms_d, rsq_d = multistep_forecast(model_one_hot, 8, st_vIA, st_vDA, st_vDates, 0)
     for i in rms_d.keys():
         metrics[i] = rms_d[i]
     for j in rsq_d.keys():
@@ -646,7 +649,7 @@ for site in vIAs_t_24.keys():
     merged_df['lat'] = lat
     merged_df['lon'] = lon
     merged_dfs.append(merged_df)
-    #merged_df.to_csv(r"D:\Will_Git\Ozone_ML\Year2\results\universal_one_hot\{}_6hour_24time_n.csv".format(site))
+    merged_df.to_csv(r"D:\Will_Git\Ozone_ML\Year2\results\universal_one_hot\4_layer\{}_6hour_24time_n.csv".format(site))
 
 df = pd.DataFrame(metricsList)
 df.to_csv(r"D:\Will_Git\Ozone_ML\Year2\results\aggregated_metrics\universal_one_hot.csv")

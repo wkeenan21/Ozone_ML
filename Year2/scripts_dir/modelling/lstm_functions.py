@@ -81,9 +81,14 @@ def runLSTM(ind_arr, dep_arr, timesize, cols, activation, epochs, units=10, run_
         model.fit(ind_arr, dep_arr, epochs=epochs, batch_size=32, verbose=2)
         return model
 
-def trainLSTMgpt(ia, da, epochs=25, units=32, drop=0.2, batch=32):
+def trainLSTMgpt(ia, da, epochs=25, units=64, drop=0.2, batch=64, layers=0):
     model = Sequential()
-    model.add(LSTM(units=units, input_shape=(ia.shape[1], ia.shape[2])))
+    if layers > 0:
+        for i in range(layers):
+            model.add(LSTM(units=units, input_shape=(ia.shape[1], ia.shape[2]), return_sequences=True))
+        model.add(LSTM(units=units, input_shape=(ia.shape[1], ia.shape[2])))
+    else:
+        model.add(LSTM(units=units, input_shape=(ia.shape[1], ia.shape[2])))
     model.add(Dropout(drop))  # Adding 20% dropout
     model.add(Dense(units=1))  # Output layer with 1 neuron for regression task
     # Compile the model

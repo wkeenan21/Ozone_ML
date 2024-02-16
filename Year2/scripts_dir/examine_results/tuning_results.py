@@ -16,19 +16,16 @@ for file in os.listdir(results_dir):
         dropout=float(dropout)
     except:
         dropout=int(dropout[0])
-    print(dropout)
 
     t = fileParams.find('t')
     timesize = int(fileParams[t+1:t+3])
-    print(timesize)
+
 
     b = fileParams.find('b')
     batch = int(fileParams[b+1:b+3])
 
     u = fileParams.find('u')
     unit = fileParams[u+1:]
-    print(batch)
-    print(unit)
 
     rmss = []
     rsqs = []
@@ -44,4 +41,7 @@ for file in os.listdir(results_dir):
     results.append({'dropout':dropout, 'units':unit, 'batch':batch, 'timesize':timesize, 'rsq':mean_rsq, 'rmse':mean_rms})
 
 metrics = pd.DataFrame.from_dict(results)
-sorted_metrics = metrics.sort_values(by='rmse')
+sorted_metrics = metrics.sort_values(by='rsq', ascending=False)
+
+sorted_metrics = metrics.sort_values(by='rmse', ascending=True)
+

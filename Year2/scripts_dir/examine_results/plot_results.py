@@ -11,6 +11,8 @@ def plotScat(df, xaxis, yaxis, yaxisLabel=None, filt = None, yaxis2 = None, xaxi
     tsfont = {'fontname': font, 'size': fontsize} # gotta add this as a kwarg to change the font on things, except legend
     fontParams = {'family' : font,'size': fontsize}
     matplotlib.rc('font', **fontParams) # this changes the font of the legend for some reason
+    # transform to ppb
+
 
     # make labels
     if not yaxisLabel:
@@ -55,9 +57,9 @@ def plotScat(df, xaxis, yaxis, yaxisLabel=None, filt = None, yaxis2 = None, xaxi
             p_value = '<0.01'
         else:
             p_value = str(round_to_1(p_value))
-        ax.annotate('$R^2$ = ' + str(r_value**2)[0:4], (df[xaxis].max() +annotate_shift,df[yaxis].min()), **tsfont)
+        ax.annotate('$R^2$ = ' + str(r_value**2)[0:4], (df[xaxis].max()- (df[xaxis].max()/10*3),df[yaxis].min()), **tsfont)
         rmse = mean_squared_error(df[xaxis], df[yaxis], squared=False)
-        ax.annotate('RMSE = ' + str(rmse)[0:6], (df[xaxis].max() +annotate_shift-0.015,df[yaxis].min()), **tsfont)
+        ax.annotate('RMSE = ' + str(rmse)[0:4], (df[xaxis].max() -(df[xaxis].max()/10),df[yaxis].min()), **tsfont)
         print(f'p value: {p_value}')
 
     ax.set_ylabel(yaxisLabel)
@@ -73,18 +75,34 @@ def plotScat(df, xaxis, yaxis, yaxisLabel=None, filt = None, yaxis2 = None, xaxi
     return fig
 
 sites = ['Evergreen', 'Idaho Springs', 'Five Points', 'Welby', 'Highlands Ranch', 'Rocky Flats', 'Boulder', 'Chatfield Reservoir', 'Sunnyside', 'East Plains', 'South Table']
+
 for site in sites:
-    pp = PdfPages(r'D:\Will_Git\Ozone_ML\Year2\results\plots\{}uoh.pdf'.format(site))
-    res = r"D:\Will_Git\Ozone_ML\Year2\results\universal_one_hot\{}_6hour_24time_n.csv".format(site)
+    print(site)
+    pp = PdfPages(r'D:\Will_Git\Ozone_ML\Year2\results\plots\4_layer\{}_24.pdf'.format(site))
+    res = r"D:\Will_Git\Ozone_ML\Year2\results\universal_one_hot\4_layer\{}_6hour_24time_n.csv".format(site)
     df = pd.read_csv(res)
     df['date'] =pd.to_datetime(df['date'], utc=False)
     filtered_df = df[df['date'] < '2023-07-15']
-    fig1 = plotScat(df, 'actual', xaxisLabel='Observed Ozone (ppb)', yaxisLabel='1 Hour Forecasted Ozone (ppb)', yaxis=f'preds_0_{site}', title=site, annotate_shift=-0.01)
-    fig2 = plotScat(df, 'actual', xaxisLabel='Observed Ozone (ppb)', yaxisLabel='6 Hour Forecasted Ozone (ppb)', yaxis=f'preds_5_{site}', title=site, annotate_shift=-0.01)
+
+    # transform to ppb
+    for col in df.columns:
+        if 'preds' in col or 'actual' in col:
+            df[col] = df[col] * 1000
+            # remove outliers
+            df[col] = df[col].where(df[col] > 0, 0)
+            df[col] = df[col].where(df[col] < 150, 150)
+
+    fig1 = plotScat(df, 'actual', xaxisLabel='Observed Ozone (ppb)', yaxisLabel='1 Hour Forecasted Ozone (ppb)', yaxis=f'preds_0_{site}', title=site,)
+
+    fig2 = plotScat(df, 'actual', xaxisLabel='Observed Ozone (ppb)', yaxisLabel='6 Hour Forecasted Ozone (ppb)', yaxis=f'preds_5_{site}', title=site,)
+
+    fig3 = plotScat(df, 'actual', xaxisLabel='Observed Ozone (ppb)', yaxisLabel='8 Hour Forecasted Ozone (ppb)', yaxis=f'preds_7_{site}', title=site,)
+    plt.close()
     plt.close()
     plt.close()
     pp.savefig(fig1)
     pp.savefig(fig2)
+    pp.savefig(fig3)
     pp.close()
 
 

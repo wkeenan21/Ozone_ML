@@ -186,10 +186,10 @@ for timesize in timesizes:
     #ia, da, nans = split_data(sets, cols, False, 24)
 
     #model = runLSTM(trainIA, trainDA, 72, cols=cols, activation='sigmoid', epochs=25, units=32, run_model=True)
-    epochs = [25]
-    batches = [32, 64, 128]
-    units = [32, 64, 128]
-    drops = [0, 0.2, 0.4]
+    epochs = [25, 50, 75]
+    batches = [64]
+    units = [64]
+    drops = [0.2]
     activation = []
     for e in epochs:
         for b in batches:
