@@ -1,0 +1,23 @@
+<PAMDataset>
+  <Metadata>
+    <MDI key="DataType">Generic</MDI>
+  </Metadata>
+  <PAMRasterBand band="1">
+    <Description>reclass_nlcd</Description>
+    <NoDataValue le_hex_equiv="000000E0FFFFEF47">3.40282346638529E+38</NoDataValue>
+    <Histograms>
+      <HistItem>
+        <HistMin>0</HistMin>
+        <HistMax>2</HistMax>
+        <BucketCount>256</BucketCount>
+        <IncludeOutOfRange>1</IncludeOutOfRange>
+        <Approximate>0</Approximate>
+        <HistCounts>49917|0|0|0|0|0|0|0|0|0|0|0|0|0|2487|3|0|0|3|0|0|32|0|0|0|2|0|0|1372|0|0|3|0|0|0|0|0|0|0|0|0|0|704|0|0|0|0|1|0|0|0|2|0|0|1|0|504|0|0|0|0|0|0|8|0|0|0|0|0|0|398|0|1|0|0|0|1|0|0|0|0|0|0|0|0|325|0|0|0|0|0|0|0|0|0|1|0|0|0|265|0|0|0|0|0|0|3|0|0|0|0|0|0|244|0|0|0|0|0|0|0|0|0|0|0|0|0|263|0|0|0|0|0|0|0|0|0|0|0|0|0|277|0|0|0|1|0|0|3|0|0|0|0|0|0|273|0|0|0|0|0|0|0|0|0|0|0|0|0|0|270|0|0|0|0|0|0|0|1|0|0|0|0|0|210|0|0|0|0|0|0|0|0|0|0|0|0|0|154|0|0|0|0|0|0|0|0|1|0|0|0|0|102|0|0|0|0|0|0|0|0|0|0|0|0|0|70|0|0|0|0|0|0|0|0|0|0|0|0|0|46|0|0|0|0|0|0|0|0|0|0|0|0|0|0|20</HistCounts>
+      </HistItem>
+    </Histograms>
+    <Metadata>
+      <MDI key="BandName">reclass_nlcd</MDI>
+      <MDI key="RepresentationType">ATHEMATIC</MDI>
+    </Metadata>
+  </PAMRasterBand>
+</PAMDataset>

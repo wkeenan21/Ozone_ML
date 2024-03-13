@@ -76,13 +76,19 @@ def plotScat(df, xaxis, yaxis, yaxisLabel=None, filt = None, yaxis2 = None, xaxi
 
 sites = ['Evergreen', 'Idaho Springs', 'Five Points', 'Welby', 'Highlands Ranch', 'Rocky Flats', 'Boulder', 'Chatfield Reservoir', 'Sunnyside', 'East Plains', 'South Table']
 
+testName = 'ozone_aware_universal_2024-03-13'
+metricsList = []
 for site in sites:
+    metrics = {}
     print(site)
-    pp = PdfPages(r'D:\Will_Git\Ozone_ML\Year2\results\plots\4_layer\{}_24.pdf'.format(site))
-    res = r"D:\Will_Git\Ozone_ML\Year2\results\universal_one_hot\4_layer\{}_6hour_24time_n.csv".format(site)
+    metrics['site'] = site
+    plotFold = fr'D:\Will_Git\Ozone_ML\Year2\results\plots\v3\{testName}'
+    if not os.path.exists(plotFold):
+        os.makedirs(plotFold)
+    pp = PdfPages(r'{}\{}_24.pdf'.format(plotFold, site))
+    res = r"D:\Will_Git\Ozone_ML\Year2\results\v3\{}\{}.csv".format(testName, site)
     df = pd.read_csv(res)
     df['date'] =pd.to_datetime(df['date'], utc=False)
-    filtered_df = df[df['date'] < '2023-07-15']
 
     # transform to ppb
     for col in df.columns:
@@ -91,6 +97,18 @@ for site in sites:
             # remove outliers
             df[col] = df[col].where(df[col] > 0, 0)
             df[col] = df[col].where(df[col] < 150, 150)
+
+    for i in range(6):
+        j = i+1
+        rms = mean_squared_error(df['actual'], df[f'preds_{i}_{site}'], squared=False)
+        model1 = LinearRegression()
+        X = np.array(df['actual']).reshape(-1, 1)
+        model1.fit(X, df[f'preds_{i}_{site}'])
+        rsq = model1.score(X, df[f'preds_{i}_{site}'])
+        metrics[f'{j} Hour RMSE'] = rms
+        metrics[f'{j} Hour R2'] = rsq
+    metricsList.append(metrics)
+
 
     fig1 = plotScat(df, 'actual', xaxisLabel='Observed Ozone (ppb)', yaxisLabel='1 Hour Forecasted Ozone (ppb)', yaxis=f'preds_0_{site}', title=site,)
 
@@ -105,6 +123,35 @@ for site in sites:
     pp.savefig(fig3)
     pp.close()
 
+answer = pd.DataFrame.from_dict(metricsList)
+answer.to_csv(r'{}\metrics.csv'.format(plotFold))
+
+# plot estimation results
+res_dir = r'D:\Will_Git\Ozone_ML\Year2\results\interp_error_testing\result_csvs'
+dfs = []
+for file in os.listdir(res_dir):
+    df = pd.read_csv(os.path.join(res_dir, file))
+    dfs.append(df)
+
+bigDf = pd.concat(dfs)
+for site in sites:
+    print(site)
+    pp = PdfPages(r'D:\Will_Git\Ozone_ML\Year2\results\plots\estimation_results\3\{}.pdf'.format(site))
+    df = bigDf[bigDf['site_name'] == site]
+
+    #df['date'] =pd.to_datetime(df['date'], utc=False)
+    for i in range(6):
+        rms = mean_squared_error(df['actual'], df[f'preds_{i}'], squared=False)
+        model1 = LinearRegression()
+        X = np.array(df['actual']).reshape(-1, 1)
+        model1.fit(X, df[f'preds_{i}'])
+        rsq = model1.score(X, df[f'preds_{i}'])
+        j = i+1
+        fig1 = plotScat(df, 'actual', xaxisLabel='Observed Ozone (ppb)', yaxisLabel=f'{j} Hour Forecasted Ozone (ppb)',
+                        yaxis=f'preds_{i}', title=site)
+        pp.savefig(fig1)
+        plt.close()
+    pp.close()
 
 
 

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xml:lang="en"><Esri><CreaDate>20240305</CreaDate><CreaTime>14162200</CreaTime><ArcGISFormat>1.0</ArcGISFormat><SyncOnce>TRUE</SyncOnce><DataProperties><lineage><Process ToolSource="c:\program files\arcgis\pro\Resources\ArcToolbox\toolboxes\Image Analyst Tools.tbx\FocalStatistics" Date="20240305" Time="141622">FocalStatistics reclass_nlcd D:\Will_Git\Ozone_ML\Year2\BasicGIS\fs_nlcd_mean "Rectangle 3 3 CELL" Mean DATA 90</Process></lineage></DataProperties></Esri></metadata>

@@ -7,8 +7,9 @@ List our file paths
 baseDir = r'D:\Will_Git\Ozone_ML'
 windFold = fr"{baseDir}\Year2\HRRR_Data\training\wind"
 tempFold = fr"{baseDir}\Year2\HRRR_Data\training\tempAndRH"
-oFold = fr"{baseDir}\Year2\EPA_Data"
+oFold = fr"{baseDir}\Year2\EPA_Data\v2"
 mFold = fr"{baseDir}\Year2\HRRR_Data\training\meteorology"
+nFold = fr"{baseDir}\Year2\EPA_Data\no2"
 
 """
 First we merge everything into one df
@@ -36,16 +37,30 @@ for year in years:
         tPath = os.path.join(tempFold, time)
         oPath = os.path.join(oFold, time2)
         mPath = os.path.join(mFold, time)
+        nPath = os.path.join(nFold, time2)
         mDf = pd.read_csv(mPath)
         wDf = pd.read_csv(wPath)
         tDf = pd.read_csv(tPath)
         oDf = pd.read_csv(oPath)
+        nDf = pd.read_csv(nPath)
         wDf.drop(labels=drop, axis=1, inplace=True)
         tDf.drop(labels=drop, axis=1, inplace=True)
         mDf.drop(labels=drop3, axis=1, inplace=True)
+        nDf.drop(labels=drop2, axis=1, inplace=True)
         if True:
             oDf.drop(labels=drop2, axis=1, inplace=True)
             mDf.rename(columns={'unknown_x': 'MAXUVV', 'unknown_y': 'MAXDVV'}, inplace=True)
+            # make it datetime
+            oDf['datetime'] = oDf['date_gmt'] + oDf['time_gmt']
+            oDf['datetime'] = pd.to_datetime(oDf['datetime'], format='%Y-%m-%d%H:%M', utc=True)
+            nDf['datetime'] = nDf['date_gmt'] + nDf['time_gmt']
+            nDf['datetime'] = pd.to_datetime(nDf['datetime'], format='%Y-%m-%d%H:%M', utc=True)
+            # a list of latitudes that share an o station and a no2 station
+            collocatedN = [39.838119, 39.751184, 39.77949, 39.912799]
+
+            nDf = nDf[nDf['latitude'].isin(collocatedN)]
+            nDf.rename(columns={'sample_measurement': 'no2'}, inplace=True)
+            oDf = pd.merge(oDf, nDf[['no2', 'datetime', 'latitude']], on=['datetime', 'latitude'], how='left')
 
             df_list = [wDf, tDf, mDf]
             hrrr = reduce(lambda left, right: pd.merge(left, right, on=['time', 'point_latitude', 'point_longitude'], how='outer'), df_list)
@@ -53,8 +68,7 @@ for year in years:
             hrrr.rename(columns={"point_latitude": "latitude", "point_longitude": "longitude", 'time':'datetime'}, inplace=True)
             hrrr['datetime'] = pd.to_datetime(hrrr['datetime'], format='%Y-%m-%d %H:%M:%S', utc=True)
 
-            oDf['datetime'] = oDf['date_gmt'] + oDf['time_gmt']
-            oDf['datetime'] = pd.to_datetime(oDf['datetime'], format='%Y-%m-%d%H:%M', utc=True)
+
 
             a = pd.merge(hrrr, oDf, on=['datetime', 'latitude', 'longitude'])
             dfs["{}-{}".format(month, year)] = a
@@ -70,12 +84,12 @@ for col in pop_df.columns:
     if 'RASTERVALU' not in col and col != 'site':
         pop_drop.append(col)
 pop_df.drop(labels=pop_drop, axis=1, inplace=True)
-pop_df.rename({'RASTERVALU': 'pop_den'}, inplace=True)
+pop_df.rename(columns={'RASTERVALU': 'pop_den'}, inplace=True)
 
 # site numbers are not unique, only unique by county. So make a new column for unique sites
 a['site'] = a['site_number'] + a['county_code']
 # merge pop den with other data
-test = a.merge(pop_df, on='site', how='inner')
+a = a.merge(pop_df, on='site', how='inner')
 # I wanna name the sites
 a['site_name'] = 'placeholder'
 a['site_name'].where(a['site'] != 50, other='Idaho Springs', inplace=True)
@@ -89,7 +103,13 @@ a['site_name'].where(a['site'] != 7, other='Highlands Ranch', inplace=True)
 a['site_name'].where(a['site'] != 39, other='Chatfield Reservoir', inplace=True)
 a['site_name'].where(a['site'] != 11, other='East Plains', inplace=True)
 a['site_name'].where(a['site'] != 73, other='Evergreen', inplace=True)
-a.to_csv(fr"{baseDir}\Year2\Merged_Data\merge4.csv")
+
+# create an NO2 boolean column to designate what sites have it
+no2_sites = ['Welby', 'Rocky Flats', 'Sunnyside', 'Five Points']
+a['no2_bool'] = True
+a['no2_bool'].where(a['site_name'].isin(no2_sites), other=False, inplace=True)
+
+a.to_csv(fr"{baseDir}\Year2\Merged_Data\merge7.csv")
 
 
 sites = a['latitude'].unique()

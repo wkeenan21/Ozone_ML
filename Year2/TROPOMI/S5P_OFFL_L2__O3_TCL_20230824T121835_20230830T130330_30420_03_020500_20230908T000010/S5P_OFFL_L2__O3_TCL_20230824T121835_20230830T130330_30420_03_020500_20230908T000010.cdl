@@ -1,0 +1,362 @@
+netcdf S5P_OFFL_L2__O3_TCL_20230824T121835_20230830T130330_30420_03_020500_20230908T000010 {
+
+// global attributes:
+		:Conventions = "CF-1.7" ;
+		:institution = "DLR-IUP" ;
+		:title = "TROPOMI/S5P Ozone Tropospheric Column" ;
+		:references = "https://atmos.eoc.dlr.de/tropomi" ;
+		:keywords_vocabulary = "AGU index terms, http://publications.agu.org/author-resource-center/index-terms/" ;
+		:keywords = "0345 Pollution, Urban and regional; 0365 Troposphere, Composition and chemistry; 0368 Troposphere, Constituent Transport and Chemistry; 3360 Remote sensing" ;
+		:identifier_product_doi_authority = "http://dx.doi.org/" ;
+		:time_reference = "2023-08-24T00:00:00" ;
+		:time_coverage_start = "2023-08-24T12:18:35" ;
+		:time_coverage_end = "2023-08-30T13:03:30" ;
+		:time_coverage_troposphere_start = "2023-08-25T23:49" ;
+		:time_coverage_troposphere_end = "2023-08-29T00:33" ;
+		:geospatial_vertical_range_top_troposphere = "27000.0" ;
+		:geospatial_vertical_range_bottom_stratosphere = "27000.0" ;
+		:processor_version = "02.05.00" ;
+		:product_version = "2.1.0" ;
+		:algorithm_version = "UPAS-O3TCL-CCD-1.1.0" ;
+		:id = "S5P_OFFL_L2__O3_TCL_20230824T121835_20230830T130330_30420_01_020500_20230908T000010" ;
+		:identifier_product_doi = "10.5270/S5P-hcp1l2m" ;
+
+group: PRODUCT {
+  dimensions:
+  	time = 1 ;
+  	latitude_ccd = 80 ;
+  	longitude_ccd = 360 ;
+  	latitude_csa = 8 ;
+  	longitude_csa = 18 ;
+  variables:
+  	int time(time) ;
+  		time:_FillValue = -2147483647 ;
+  		time:units = "seconds" ;
+  		time:standard_name = "time" ;
+  		time:long_name = "time of the measurements" ;
+  	float latitude_ccd(latitude_ccd) ;
+  		latitude_ccd:_FillValue = 9.96921e+36f ;
+  		latitude_ccd:long_name = "pixel center latitude for CCD data" ;
+  		latitude_ccd:units = "degrees_north" ;
+  		latitude_ccd:standard_name = "latitude" ;
+  		latitude_ccd:valid_min = -20.f ;
+  		latitude_ccd:valid_max = 20.f ;
+  	float longitude_ccd(longitude_ccd) ;
+  		longitude_ccd:_FillValue = 9.96921e+36f ;
+  		longitude_ccd:long_name = "pixel center longitude for CCD data" ;
+  		longitude_ccd:units = "degrees_east" ;
+  		longitude_ccd:standard_name = "longitude" ;
+  		longitude_ccd:valid_min = -180.f ;
+  		longitude_ccd:valid_max = 180.f ;
+  	float latitude_csa(latitude_csa) ;
+  		latitude_csa:_FillValue = 9.96921e+36f ;
+  		latitude_csa:long_name = "latitude center for CSA data" ;
+  		latitude_csa:units = "degrees_north" ;
+  		latitude_csa:standard_name = "latitude" ;
+  		latitude_csa:valid_min = -20.f ;
+  		latitude_csa:valid_max = 20.f ;
+  	float longitude_csa(longitude_csa) ;
+  		longitude_csa:_FillValue = 9.96921e+36f ;
+  		longitude_csa:long_name = "longitude center for CSA data" ;
+  		longitude_csa:units = "degrees_east" ;
+  		longitude_csa:standard_name = "longitude" ;
+  		longitude_csa:valid_min = -180.f ;
+  		longitude_csa:valid_max = 180.f ;
+  	float ozone_tropospheric_vertical_column(time, latitude_ccd, longitude_ccd) ;
+  		ozone_tropospheric_vertical_column:_FillValue = 9.96921e+36f ;
+  		ozone_tropospheric_vertical_column:units = "mol m-2" ;
+  		ozone_tropospheric_vertical_column:standard_name = "troposphere_mole_content_of_ozone" ;
+  		ozone_tropospheric_vertical_column:long_name = "average tropospheric ozone column based on CCD algorithm" ;
+  		ozone_tropospheric_vertical_column:valid_min = 0.f ;
+  		ozone_tropospheric_vertical_column:multiplication_factor_to_convert_to_DU = 2241.15f ;
+  		ozone_tropospheric_vertical_column:multiplication_factor_to_convert_to_molecules_percm2 = 6.02214e+19f ;
+  		ozone_tropospheric_vertical_column:coordinates = "/PRODUCT/longitude_ccd /PRODUCT/latitude_ccd" ;
+  		ozone_tropospheric_vertical_column:vertical_range_top = "27000.0_Pa" ;
+  	float ozone_tropospheric_vertical_column_precision(time, latitude_ccd, longitude_ccd) ;
+  		ozone_tropospheric_vertical_column_precision:_FillValue = 9.96921e+36f ;
+  		ozone_tropospheric_vertical_column_precision:units = "mol m-2" ;
+  		ozone_tropospheric_vertical_column_precision:standard_name = "troposphere_mole_content_of_ozone standard_error" ;
+  		ozone_tropospheric_vertical_column_precision:long_name = "standard deviation of tropospheric ozone column based on CCD algorithm" ;
+  		ozone_tropospheric_vertical_column_precision:valid_min = 0.f ;
+  		ozone_tropospheric_vertical_column_precision:multiplication_factor_to_convert_to_DU = 2241.15f ;
+  		ozone_tropospheric_vertical_column_precision:multiplication_factor_to_convert_to_molecules_percm2 = 6.02214e+19f ;
+  		ozone_tropospheric_vertical_column_precision:coordinates = "/PRODUCT/longitude_ccd /PRODUCT/latitude_ccd" ;
+  		ozone_tropospheric_vertical_column_precision:vertical_range_top = "27000.0_Pa" ;
+  	float ozone_tropospheric_mixing_ratio(time, latitude_ccd, longitude_ccd) ;
+  		ozone_tropospheric_mixing_ratio:_FillValue = 9.96921e+36f ;
+  		ozone_tropospheric_mixing_ratio:units = "1" ;
+  		ozone_tropospheric_mixing_ratio:scale_factor = 1.e-09f ;
+  		ozone_tropospheric_mixing_ratio:standard_name = "troposphere_mole_fraction_of_ozone_in_air" ;
+  		ozone_tropospheric_mixing_ratio:long_name = "average tropospheric ozone mixing ratio based on CCD algorithm" ;
+  		ozone_tropospheric_mixing_ratio:valid_min = 0.f ;
+  		ozone_tropospheric_mixing_ratio:vertical_range_bottom = "surface" ;
+  		ozone_tropospheric_mixing_ratio:coordinates = "/PRODUCT/longitude_ccd /PRODUCT/latitude_ccd" ;
+  		ozone_tropospheric_mixing_ratio:vertical_range_top = "27000.0_Pa" ;
+  	float ozone_tropospheric_mixing_ratio_precision(time, latitude_ccd, longitude_ccd) ;
+  		ozone_tropospheric_mixing_ratio_precision:_FillValue = 9.96921e+36f ;
+  		ozone_tropospheric_mixing_ratio_precision:units = "1" ;
+  		ozone_tropospheric_mixing_ratio_precision:scale_factor = 1.e-09f ;
+  		ozone_tropospheric_mixing_ratio_precision:standard_name = "troposphere_mole_fraction_of_ozone_in_air_standard_error" ;
+  		ozone_tropospheric_mixing_ratio_precision:long_name = "standard deviation of tropospheric ozone mixing ratio based on CCD algorithm" ;
+  		ozone_tropospheric_mixing_ratio_precision:valid_min = "0" ;
+  		ozone_tropospheric_mixing_ratio_precision:vertical_range_bottom = "surface" ;
+  		ozone_tropospheric_mixing_ratio_precision:vertical_range_top = "27000.0_Pa" ;
+  	float ozone_upper_tropospheric_mixing_ratio(time, latitude_csa, longitude_csa) ;
+  		ozone_upper_tropospheric_mixing_ratio:_FillValue = 9.96921e+36f ;
+  		ozone_upper_tropospheric_mixing_ratio:units = "1" ;
+  		ozone_upper_tropospheric_mixing_ratio:long_name = "upper tropospheric ozone mixing ratio based on CSA algorithm" ;
+  		ozone_upper_tropospheric_mixing_ratio:scale_factor = 1.e-09f ;
+  		ozone_upper_tropospheric_mixing_ratio:standard_name = "troposphere_mole_fraction_of_ozone_in_air" ;
+  		ozone_upper_tropospheric_mixing_ratio:valid_min = 0.f ;
+  		ozone_upper_tropospheric_mixing_ratio:coordinates = "/PRODUCT/longitude_csa /PRODUCT/latitude_csa" ;
+  	float ozone_upper_tropospheric_mixing_ratio_precision(time, latitude_csa, longitude_csa) ;
+  		ozone_upper_tropospheric_mixing_ratio_precision:_FillValue = 9.96921e+36f ;
+  		ozone_upper_tropospheric_mixing_ratio_precision:units = "1" ;
+  		ozone_upper_tropospheric_mixing_ratio_precision:scale_factor = 1.e-09f ;
+  		ozone_upper_tropospheric_mixing_ratio_precision:standard_name = "troposphere_mole_fraction_of_ozone_in_air_standard_error" ;
+  		ozone_upper_tropospheric_mixing_ratio_precision:long_name = "standard deviation of upper tropospheric ozone mixing ratio based on CSA algorithm" ;
+  		ozone_upper_tropospheric_mixing_ratio_precision:valid_min = 0.f ;
+  		ozone_upper_tropospheric_mixing_ratio_precision:coordinates = "/PRODUCT/longitude_csa /PRODUCT/latitude_csa" ;
+  	int ozone_upper_tropospheric_mixing_ratio_flag(time, latitude_csa, longitude_csa) ;
+  		ozone_upper_tropospheric_mixing_ratio_flag:_FillValue = -2147483647 ;
+  		ozone_upper_tropospheric_mixing_ratio_flag:units = "1" ;
+  		ozone_upper_tropospheric_mixing_ratio_flag:standard_name = "troposphere_mole_fraction_of_ozone_in_air status_flag" ;
+  		ozone_upper_tropospheric_mixing_ratio_flag:long_name = "quality flag to upper tropospheric mixing ratio based on CSA algorithm" ;
+  		ozone_upper_tropospheric_mixing_ratio_flag:valid_min = 0.f ;
+  		ozone_upper_tropospheric_mixing_ratio_flag:flag_values = "0, 1, 2, 4, 8" ;
+  		ozone_upper_tropospheric_mixing_ratio_flag:flag_meanings = "good_quality not_enough_datapoints pressure_difference_too_small highest_clouds_too_low negative_mixingratio_retrieved" ;
+  		ozone_upper_tropospheric_mixing_ratio_flag:coordinates = "/PRODUCT/longitude_csa /PRODUCT/latitude_csa" ;
+  	ubyte qa_value(time, latitude_ccd, longitude_ccd) ;
+  		qa_value:_FillValue = 255UB ;
+  		qa_value:units = "1" ;
+  		qa_value:scale_factor = 0.01f ;
+  		qa_value:add_offset = 0.f ;
+  		qa_value:valid_min = 0UB ;
+  		qa_value:valid_max = 100UB ;
+  		qa_value:long_name = "data quality value for the CCD algorithm" ;
+  		qa_value:comment = "A continuous quality descriptor, varying between 0 (no data) and 1 (full quality data). Recommend to ignore data with qa_value < 0.5" ;
+  		qa_value:coordinates = "/PRODUCT/longitude_ccd /PRODUCT/latitude_ccd" ;
+
+  group: SUPPORT_DATA {
+
+    group: DETAILED_RESULTS {
+      variables:
+      	float ozone_stratospheric_vertical_column(time, latitude_ccd, longitude_ccd) ;
+      		ozone_stratospheric_vertical_column:_FillValue = 9.96921e+36f ;
+      		ozone_stratospheric_vertical_column:units = "mol m-2" ;
+      		ozone_stratospheric_vertical_column:standard_name = "stratosphere_mole_content_of_ozone" ;
+      		ozone_stratospheric_vertical_column:long_name = "average stratospheric ozone column based on the CCD algorithm" ;
+      		ozone_stratospheric_vertical_column:vertical_range_top = "80_km" ;
+      		ozone_stratospheric_vertical_column:multiplication_factor_to_convert_to_DU = 2241.15f ;
+      		ozone_stratospheric_vertical_column:multiplication_factor_to_convert_to_molecules_percm2 = 6.02214e+19f ;
+      		ozone_stratospheric_vertical_column:vertical_range_bottom = "27000.0_Pa" ;
+      	float ozone_stratospheric_vertical_column_precision(time, latitude_ccd, longitude_ccd) ;
+      		ozone_stratospheric_vertical_column_precision:_FillValue = 9.96921e+36f ;
+      		ozone_stratospheric_vertical_column_precision:units = "mol m-2" ;
+      		ozone_stratospheric_vertical_column_precision:standard_name = "stratosphere_mole_content_of_ozone error" ;
+      		ozone_stratospheric_vertical_column_precision:long_name = "standard deviation of stratospheric ozone column based on the CCD algorithm" ;
+      		ozone_stratospheric_vertical_column_precision:vertical_range_top = "80_km" ;
+      		ozone_stratospheric_vertical_column_precision:multiplication_factor_to_convert_to_DU = 2241.15f ;
+      		ozone_stratospheric_vertical_column_precision:multiplication_factor_to_convert_to_molecules_percm2 = 6.02214e+19f ;
+      		ozone_stratospheric_vertical_column_precision:vertical_range_bottom = "27000.0_Pa" ;
+      	float ozone_stratospheric_vertical_column_reference(time, latitude_ccd) ;
+      		ozone_stratospheric_vertical_column_reference:_FillValue = 9.96921e+36f ;
+      		ozone_stratospheric_vertical_column_reference:units = "mol m-2" ;
+      		ozone_stratospheric_vertical_column_reference:standard_name = "stratosphere_mole_content_of_ozone" ;
+      		ozone_stratospheric_vertical_column_reference:long_name = "averaged stratospheric ozone column in the reference are based on the CCD algorithm" ;
+      		ozone_stratospheric_vertical_column_reference:vertical_range_top = "80_km" ;
+      		ozone_stratospheric_vertical_column_reference:multiplication_factor_to_convert_to_DU = 2241.15f ;
+      		ozone_stratospheric_vertical_column_reference:multiplication_factor_to_convert_to_molecules_percm2 = 6.02214e+19f ;
+      		ozone_stratospheric_vertical_column_reference:vertical_range_bottom = "27000.0_Pa" ;
+      	float ozone_stratospheric_vertical_column_reference_precision(time, latitude_ccd) ;
+      		ozone_stratospheric_vertical_column_reference_precision:_FillValue = 9.96921e+36f ;
+      		ozone_stratospheric_vertical_column_reference_precision:units = "mol m-2" ;
+      		ozone_stratospheric_vertical_column_reference_precision:standard_name = "stratosphere_mole_content_of_ozone standard_error" ;
+      		ozone_stratospheric_vertical_column_reference_precision:long_name = "standard deviation of stratospheric ozone column in the reference area based on the CCD algorithm" ;
+      		ozone_stratospheric_vertical_column_reference_precision:vertical_range_top = "80_km" ;
+      		ozone_stratospheric_vertical_column_reference_precision:vertical_range_bottom = "27000.0_Pa" ;
+      	int ozone_stratospheric_vertical_column_reference_flag(time, latitude_ccd) ;
+      		ozone_stratospheric_vertical_column_reference_flag:_FillValue = -2147483647 ;
+      		ozone_stratospheric_vertical_column_reference_flag:units = "1" ;
+      		ozone_stratospheric_vertical_column_reference_flag:standard_name = "stratosphere_mole_content_of_ozone status_flag" ;
+      		ozone_stratospheric_vertical_column_reference_flag:long_name = "quality flag of stratospheric ozone column in the reference area based on the CCD algorithm" ;
+      		ozone_stratospheric_vertical_column_reference_flag:flag_values = "0, 1, 2, 4, 8" ;
+      		ozone_stratospheric_vertical_column_reference_flag:flag_meanings = "good_quality stratospheric_ozone_too_low not_enough_datapoints error_too_large difference_to_neighbours_too_large" ;
+      		ozone_stratospheric_vertical_column_reference_flag:multiplication_factor_to_convert_to_DU = 2241.15f ;
+      		ozone_stratospheric_vertical_column_reference_flag:multiplication_factor_to_convert_to_molecules_percm2 = 6.02214e+19f ;
+      	float ozone_total_vertical_column(time, latitude_ccd, longitude_ccd) ;
+      		ozone_total_vertical_column:_FillValue = 9.96921e+36f ;
+      		ozone_total_vertical_column:units = "mol m-2" ;
+      		ozone_total_vertical_column:standard_name = "atmosphere_mole_content_of_ozone" ;
+      		ozone_total_vertical_column:long_name = "averaged total ozone column based on the CCD algorithm" ;
+      		ozone_total_vertical_column:vertical_range_bottom = "surface" ;
+      		ozone_total_vertical_column:vertical_range_top = "80_km" ;
+      		ozone_total_vertical_column:multiplication_factor_to_convert_to_DU = 2241.15f ;
+      		ozone_total_vertical_column:multiplication_factor_to_convert_to_molecules_percm2 = 6.02214e+19f ;
+      	int number_of_iterations_ozone_upper_tropospheric_mixing_ratio(time, latitude_csa, longitude_csa) ;
+      		number_of_iterations_ozone_upper_tropospheric_mixing_ratio:_FillValue = -2147483647 ;
+      		number_of_iterations_ozone_upper_tropospheric_mixing_ratio:long_name = "number of iterations in the upper tropospheric mixing ratio retrieval based on the CSA algorithm" ;
+      		number_of_iterations_ozone_upper_tropospheric_mixing_ratio:units = "1" ;
+      	float ozone_total_vertical_column_precision(time, latitude_ccd, longitude_ccd) ;
+      		ozone_total_vertical_column_precision:_FillValue = 9.96921e+36f ;
+      		ozone_total_vertical_column_precision:units = "mol m-2" ;
+      		ozone_total_vertical_column_precision:standard_name = "atmosphere_mole_content_of_ozone standard_error" ;
+      		ozone_total_vertical_column_precision:long_name = "standard deviation of total ozone column based on the CCD algorithm" ;
+      		ozone_total_vertical_column_precision:vertical_range_bottom = "surface" ;
+      		ozone_total_vertical_column_precision:vertical_range_top = "80_km" ;
+      		ozone_total_vertical_column_precision:multiplication_factor_to_convert_to_DU = 2241.15f ;
+      		ozone_total_vertical_column_precision:multiplication_factor_to_convert_to_molecules_percm2 = 6.02214e+19f ;
+      	float cloud_top_pressure_min(time, latitude_csa, longitude_csa) ;
+      		cloud_top_pressure_min:_FillValue = 9.96921e+36f ;
+      		cloud_top_pressure_min:units = "Pa" ;
+      		cloud_top_pressure_min:standard_name = "TBD" ;
+      		cloud_top_pressure_min:long_name = "minimum cloud top pressure minimum based on the CSA algorithm" ;
+      	float cloud_top_pressure_max(time, latitude_csa, longitude_csa) ;
+      		cloud_top_pressure_max:_FillValue = 9.96921e+36f ;
+      		cloud_top_pressure_max:units = "Pa" ;
+      		cloud_top_pressure_max:standard_name = "TBD" ;
+      		cloud_top_pressure_max:long_name = "maximum cloud top pressure" ;
+      	float surface_albedo(time, latitude_ccd, longitude_ccd) ;
+      		surface_albedo:_FillValue = 9.96921e+36f ;
+      		surface_albedo:units = "1" ;
+      		surface_albedo:standard_name = "surface_albedo" ;
+      		surface_albedo:long_name = "averaged surface albedo based on the CCD algorithm" ;
+      		surface_albedo:valid_min = 0.f ;
+      		surface_albedo:valid_max = 1.f ;
+      		surface_albedo:coordinates = "/PRODUCT/longitude_ccd /PRODUCT/latitude_ccd" ;
+      	float surface_altitude(time, latitude_ccd, longitude_ccd) ;
+      		surface_altitude:_FillValue = 9.96921e+36f ;
+      		surface_altitude:long_name = "surface altitude based on the CCD algorithm" ;
+      		surface_altitude:standard_name = "surface_altitude" ;
+      		surface_altitude:units = "m" ;
+      		surface_altitude:coordinates = "/PRODUCT/longitude_ccd /PRODUCT/latitude_ccd" ;
+      		surface_altitude:source = "http://topotools.cr.usgs.gov/gmted_viewer/" ;
+      		surface_altitude:comment = "The mean of the sub-pixels of the surface altitude above the reference geoid (WGS84) within the approximate field of view, based on the GMTED2010 surface elevation database" ;
+      	int surface_classification(time, latitude_ccd, longitude_ccd) ;
+      		surface_classification:_FillValue = -2147483647 ;
+      		surface_classification:units = "1" ;
+      		surface_classification:standard_name = "TBD" ;
+      		surface_classification:long_name = "averaged land-water mask based on the CCD algorithm" ;
+      		surface_classification:flag_values = "0, 1, 2" ;
+      		surface_classification:flag_meanings = "land coast water" ;
+      	int number_of_observations_ozone_stratospheric_vertical_column(time, latitude_ccd, longitude_ccd) ;
+      		number_of_observations_ozone_stratospheric_vertical_column:_FillValue = -2147483647 ;
+      		number_of_observations_ozone_stratospheric_vertical_column:units = "1" ;
+      		number_of_observations_ozone_stratospheric_vertical_column:standard_name = "stratosphere_mole_content_of_ozone number_of_observations" ;
+      		number_of_observations_ozone_stratospheric_vertical_column:long_name = "number of data averaged for stratospheric ozone column based on the CCD algorithm" ;
+      		number_of_observations_ozone_stratospheric_vertical_column:valid_min = 0.f ;
+      	int number_of_observations_ozone_stratospheric_vertical_column_reference(time, latitude_ccd) ;
+      		number_of_observations_ozone_stratospheric_vertical_column_reference:_FillValue = -2147483647 ;
+      		number_of_observations_ozone_stratospheric_vertical_column_reference:units = "1" ;
+      		number_of_observations_ozone_stratospheric_vertical_column_reference:standard_name = "TBD" ;
+      		number_of_observations_ozone_stratospheric_vertical_column_reference:long_name = "number of data averaged for stratospheric reference ozone column based on the CCD algorithm" ;
+      		number_of_observations_ozone_stratospheric_vertical_column_reference:valid_min = 0.f ;
+      	int number_of_observations_ozone_tropospheric_vertical_column(time, latitude_ccd, longitude_ccd) ;
+      		number_of_observations_ozone_tropospheric_vertical_column:_FillValue = -2147483647 ;
+      		number_of_observations_ozone_tropospheric_vertical_column:units = "1" ;
+      		number_of_observations_ozone_tropospheric_vertical_column:standard_name = "troposphere_mole_content_of_ozone number_of_observations" ;
+      		number_of_observations_ozone_tropospheric_vertical_column:long_name = "number of data averaged for tropospheric ozone column based on the CCD algorithm" ;
+      		number_of_observations_ozone_tropospheric_vertical_column:valid_min = 0.f ;
+      	int number_of_observations_ozone_total_column(time, latitude_ccd, longitude_ccd) ;
+      		number_of_observations_ozone_total_column:_FillValue = -2147483647 ;
+      		number_of_observations_ozone_total_column:units = "1" ;
+      		number_of_observations_ozone_total_column:standard_name = "atmosphere_mole_content_of_ozone number_of_observations" ;
+      		number_of_observations_ozone_total_column:long_name = "number of data averaged for total ozone column based on the CCD algorithm" ;
+      		number_of_observations_ozone_total_column:valid_min = 0.f ;
+      	int number_of_observations_ozone_upper_tropospheric_mixing_ratio(time, latitude_csa, longitude_csa) ;
+      		number_of_observations_ozone_upper_tropospheric_mixing_ratio:_FillValue = -2147483647 ;
+      		number_of_observations_ozone_upper_tropospheric_mixing_ratio:units = "1" ;
+      		number_of_observations_ozone_upper_tropospheric_mixing_ratio:standard_name = "TBD" ;
+      		number_of_observations_ozone_upper_tropospheric_mixing_ratio:long_name = "number of data used in the upper tropospheric mixing ratio retrieval" ;
+      	int number_of_skipped_observations_ozone_upper_tropospheric_mixing_ratio(time, latitude_csa, longitude_csa) ;
+      		number_of_skipped_observations_ozone_upper_tropospheric_mixing_ratio:_FillValue = -2147483647 ;
+      		number_of_skipped_observations_ozone_upper_tropospheric_mixing_ratio:units = "1" ;
+      		number_of_skipped_observations_ozone_upper_tropospheric_mixing_ratio:standard_name = "TBD" ;
+      		number_of_skipped_observations_ozone_upper_tropospheric_mixing_ratio:long_name = "number of data skipped in the upper tropospheric mixing ratio retrieval based on the CSA algorithm" ;
+      	float surface_pressure(time, latitude_ccd, longitude_ccd) ;
+      		surface_pressure:_FillValue = 9.96921e+36f ;
+      		surface_pressure:long_name = "surface pressure based on the CCD algorithm" ;
+      		surface_pressure:standard_name = "surface_pressure" ;
+      		surface_pressure:units = "Pa" ;
+      		surface_pressure:coordinates = "/PRODUCT/longitude_ccd /PRODUCT/latitude_ccd" ;
+      		surface_pressure:source = "http://topotools.cr.usgs.gov/gmted_viewer/\"" ;
+      		surface_pressure:comment = "Surface pressure" ;
+      } // group DETAILED_RESULTS
+    } // group SUPPORT_DATA
+  } // group PRODUCT
+
+group: METADATA {
+
+  // group attributes:
+  		:input_orbits = "30377 30378 30379 30380 30381 30382 30383 30384 30385 30386 30387 30388 30389 30390 30391 30392 30393 30394 30395 30396 30397 30398 30399 30400 30401 30402 30403 30404 30405 30406 30407 30408 30409 30410 30411 30412 30413 30414 30415 30416 30417 30418 30419 30420 30421 30422 30423 30424 30425 30426 30427 30428 30429 30430 30431 30432 30433 30434 30435 30436 30437 30438 30439 30440 30441 30442 30443 30444 30445 30446 30447 30448 30449 30450 30451 30452 30453 30454 30455 30456 30457 30458 30459 30460 30461 30462" ;
+  		:input_files = "/mnt/data1/storage_offl_l2/pp_o3/O3-612363527/S5P_OFFL_L2__O3_____20230824T115701_20230824T133830_30377_03_020500_20230826T041718.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612363733/S5P_OFFL_L2__O3_____20230824T133830_20230824T152000_30378_03_020500_20230826T055028.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612363936/S5P_OFFL_L2__O3_____20230824T152000_20230824T170129_30379_03_020500_20230826T065716.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612364139/S5P_OFFL_L2__O3_____20230824T170129_20230824T184258_30380_03_020500_20230826T090948.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612364344/S5P_OFFL_L2__O3_____20230824T184258_20230824T202428_30381_03_020500_20230826T105013.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612364547/S5P_OFFL_L2__O3_____20230824T202428_20230824T220557_30382_03_020500_20230826T122323.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612364750/S5P_OFFL_L2__O3_____20230824T220557_20230824T234726_30383_03_020500_20230826T141511.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612364953/S5P_OFFL_L2__O3_____20230824T234726_20230825T012856_30384_03_020500_20230826T154251.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612365161/S5P_OFFL_L2__O3_____20230825T012856_20230825T031025_30385_03_020500_20230826T172337.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612365365/S5P_OFFL_L2__O3_____20230825T031025_20230825T045154_30386_03_020500_20230826T190419.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612365569/S5P_OFFL_L2__O3_____20230825T045154_20230825T063323_30387_03_020500_20230826T204653.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612365773/S5P_OFFL_L2__O3_____20230825T063323_20230825T081453_30388_03_020500_20230826T222803.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612365977/S5P_OFFL_L2__O3_____20230825T081453_20230825T095622_30389_03_020500_20230827T003358.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612366181/S5P_OFFL_L2__O3_____20230825T095622_20230825T113752_30390_03_020500_20230827T020941.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612366498/S5P_OFFL_L2__O3_____20230825T113752_20230825T131921_30391_03_020500_20230827T035819.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612366705/S5P_OFFL_L2__O3_____20230825T131921_20230825T150050_30392_03_020500_20230827T053529.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612366909/S5P_OFFL_L2__O3_____20230825T150050_20230825T164219_30393_03_020500_20230827T064405.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612367113/S5P_OFFL_L2__O3_____20230825T164219_20230825T182349_30394_03_020500_20230827T084649.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612367317/S5P_OFFL_L2__O3_____20230825T182349_20230825T200518_30395_03_020500_20230827T103423.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612367523/S5P_OFFL_L2__O3_____20230825T200518_20230825T214647_30396_03_020500_20230827T115746.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612367727/S5P_OFFL_L2__O3_____20230825T214647_20230825T232817_30397_03_020500_20230827T134820.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612367931/S5P_OFFL_L2__O3_____20230825T232817_20230826T010946_30398_03_020500_20230827T152703.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612368139/S5P_OFFL_L2__O3_____20230826T010946_20230826T025115_30399_03_020500_20230827T170800.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612368343/S5P_OFFL_L2__O3_____20230826T025115_20230826T043244_30400_03_020500_20230827T184155.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612368547/S5P_OFFL_L2__O3_____20230826T043244_20230826T061414_30401_03_020500_20230827T203114.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612368751/S5P_OFFL_L2__O3_____20230826T061414_20230826T075543_30402_03_020500_20230827T221812.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612368955/S5P_OFFL_L2__O3_____20230826T075543_20230826T093713_30403_03_020500_20230828T001032.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612369159/S5P_OFFL_L2__O3_____20230826T093713_20230826T111842_30404_03_020500_20230828T013546.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612369476/S5P_OFFL_L2__O3_____20230826T111842_20230826T130011_30405_03_020500_20230828T033812.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612369683/S5P_OFFL_L2__O3_____20230826T130011_20230826T144140_30406_03_020500_20230828T052358.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612369887/S5P_OFFL_L2__O3_____20230826T144140_20230826T162310_30407_03_020500_20230828T063049.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612370091/S5P_OFFL_L2__O3_____20230826T162310_20230826T180439_30408_03_020500_20230828T082539.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612370295/S5P_OFFL_L2__O3_____20230826T180439_20230826T194608_30409_03_020500_20230828T101446.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612370499/S5P_OFFL_L2__O3_____20230826T194608_20230826T212738_30410_03_020500_20230828T115237.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612370705/S5P_OFFL_L2__O3_____20230826T212738_20230826T230907_30411_03_020500_20230828T133131.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612370909/S5P_OFFL_L2__O3_____20230826T230907_20230827T005036_30412_03_020500_20230828T151314.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612371117/S5P_OFFL_L2__O3_____20230827T005036_20230827T023206_30413_03_020500_20230828T164650.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612371321/S5P_OFFL_L2__O3_____20230827T023206_20230827T041335_30414_03_020500_20230828T181758.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612371525/S5P_OFFL_L2__O3_____20230827T041335_20230827T055504_30415_03_020500_20230828T201516.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612371729/S5P_OFFL_L2__O3_____20230827T055504_20230827T073633_30416_03_020500_20230828T215949.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612371933/S5P_OFFL_L2__O3_____20230827T073633_20230827T091803_30417_03_020500_20230828T235032.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612372137/S5P_OFFL_L2__O3_____20230827T091803_20230827T105932_30418_03_020500_20230829T011817.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612372454/S5P_OFFL_L2__O3_____20230827T105932_20230827T124102_30419_03_020500_20230829T032842.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612372661/S5P_OFFL_L2__O3_____20230827T124102_20230827T142231_30420_03_020500_20230829T051409.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612372865/S5P_OFFL_L2__O3_____20230827T142231_20230827T160400_30421_03_020500_20230829T061317.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612373069/S5P_OFFL_L2__O3_____20230827T160400_20230827T174529_30422_03_020500_20230829T075910.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612373273/S5P_OFFL_L2__O3_____20230827T174529_20230827T192659_30423_03_020500_20230829T095200.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612373477/S5P_OFFL_L2__O3_____20230827T192659_20230827T210828_30424_03_020500_20230829T113523.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612373681/S5P_OFFL_L2__O3_____20230827T210828_20230827T224957_30425_03_020500_20230829T130939.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612373887/S5P_OFFL_L2__O3_____20230827T224957_20230828T003127_30426_03_020500_20230829T144033.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612374095/S5P_OFFL_L2__O3_____20230828T003127_20230828T021256_30427_03_020500_20230829T163132.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612374299/S5P_OFFL_L2__O3_____20230828T021256_20230828T035425_30428_03_020500_20230829T180431.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612374503/S5P_OFFL_L2__O3_____20230828T035425_20230828T053554_30429_03_020500_20230829T195916.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612374707/S5P_OFFL_L2__O3_____20230828T053554_20230828T071724_30430_03_020500_20230829T214121.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612374911/S5P_OFFL_L2__O3_____20230828T071724_20230828T085853_30431_03_020500_20230829T233645.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612375115/S5P_OFFL_L2__O3_____20230828T085853_20230828T104022_30432_03_020500_20230830T010653.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612375432/S5P_OFFL_L2__O3_____20230828T104022_20230828T122152_30433_03_020500_20230830T030723.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612375636/S5P_OFFL_L2__O3_____20230828T122152_20230828T140321_30434_03_020500_20230830T045049.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612375843/S5P_OFFL_L2__O3_____20230828T140321_20230828T154450_30435_03_020500_20230830T060028.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612376047/S5P_OFFL_L2__O3_____20230828T154450_20230828T172619_30436_03_020500_20230830T074151.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612376251/S5P_OFFL_L2__O3_____20230828T172619_20230828T190749_30437_03_020500_20230830T093240.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612376455/S5P_OFFL_L2__O3_____20230828T190749_20230828T204918_30438_03_020500_20230830T112331.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612376659/S5P_OFFL_L2__O3_____20230828T204918_20230828T223048_30439_03_020500_20230830T124119.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612376863/S5P_OFFL_L2__O3_____20230828T223048_20230829T001217_30440_03_020500_20230830T141832.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612377069/S5P_OFFL_L2__O3_____20230829T001217_20230829T015346_30441_03_020500_20230830T161156.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612377277/S5P_OFFL_L2__O3_____20230829T015346_20230829T033515_30442_03_020500_20230830T174657.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612377481/S5P_OFFL_L2__O3_____20230829T033515_20230829T051645_30443_03_020500_20230830T193609.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612377685/S5P_OFFL_L2__O3_____20230829T051645_20230829T065814_30444_03_020500_20230830T212550.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612377889/S5P_OFFL_L2__O3_____20230829T065814_20230829T083943_30445_03_020500_20230830T231711.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612378093/S5P_OFFL_L2__O3_____20230829T083943_20230829T102113_30446_03_020500_20230831T004855.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612378410/S5P_OFFL_L2__O3_____20230829T102113_20230829T120242_30447_03_020500_20230831T024023.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612378614/S5P_OFFL_L2__O3_____20230829T120242_20230829T134411_30448_03_020500_20230831T041411.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612378821/S5P_OFFL_L2__O3_____20230829T134411_20230829T152540_30449_03_020500_20230831T054927.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612379025/S5P_OFFL_L2__O3_____20230829T152540_20230829T170710_30450_03_020500_20230831T072207.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612379229/S5P_OFFL_L2__O3_____20230829T170710_20230829T184839_30451_03_020500_20230831T091953.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612379433/S5P_OFFL_L2__O3_____20230829T184839_20230829T203008_30452_03_020500_20230831T110136.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612379637/S5P_OFFL_L2__O3_____20230829T203008_20230829T221138_30453_03_020500_20230831T122916.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612379841/S5P_OFFL_L2__O3_____20230829T221138_20230829T235307_30454_03_020500_20230831T135446.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612380045/S5P_OFFL_L2__O3_____20230829T235307_20230830T013436_30455_03_020500_20230831T154059.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612380256/S5P_OFFL_L2__O3_____20230830T013436_20230830T031605_30456_03_020500_20230831T171726.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612380460/S5P_OFFL_L2__O3_____20230830T031605_20230830T045735_30457_03_020500_20230831T191122.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612380664/S5P_OFFL_L2__O3_____20230830T045735_20230830T063904_30458_03_020500_20230831T210817.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612380868/S5P_OFFL_L2__O3_____20230830T063904_20230830T082033_30459_03_020500_20230831T225035.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612381072/S5P_OFFL_L2__O3_____20230830T082033_20230830T100203_30460_03_020500_20230901T003357.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612381276/S5P_OFFL_L2__O3_____20230830T100203_20230830T114332_30461_03_020500_20230901T021838.nc /mnt/data1/storage_offl_l2/pp_o3/O3-612381593/S5P_OFFL_L2__O3_____20230830T114332_20230830T132501_30462_03_020500_20230901T035955.nc" ;
+  		:processingMode = "OFFL" ;
+  		:cloudMode = "crb" ;
+  		:processor_version = "02.05.00" ;
+  		:algorithm_version = "UPAS-O3TCL-CCD-1.1.0" ;
+  		:days_for_tropospheric_column = 5 ;
+  		:dates_for_tropospheric_column = "20230825 20230826 20230827 20230828 20230829" ;
+
+  group: QA_STATISTICS {
+    dimensions:
+    	histogram_axis_upper_tropospheric_ozone = 100 ;
+    	histogram_axis_tropospheric_ozone = 100 ;
+    variables:
+    	int histogram_axis_upper_tropospheric_ozone(histogram_axis_upper_tropospheric_ozone) ;
+    		histogram_axis_upper_tropospheric_ozone:_FillValue = -2147483647 ;
+    		histogram_axis_upper_tropospheric_ozone:units = "1" ;
+    	float histogram_axis_tropospheric_ozone(histogram_axis_tropospheric_ozone) ;
+    		histogram_axis_tropospheric_ozone:_FillValue = 9.96921e+36f ;
+    		histogram_axis_tropospheric_ozone:units = "1" ;
+    	int ozone_upper_troposheric_mixing_ratio_histogram(histogram_axis_upper_tropospheric_ozone) ;
+    		ozone_upper_troposheric_mixing_ratio_histogram:_FillValue = -2147483647 ;
+    		ozone_upper_troposheric_mixing_ratio_histogram:units = "1" ;
+    		ozone_upper_troposheric_mixing_ratio_histogram:standard_name = "TBD" ;
+    		ozone_upper_troposheric_mixing_ratio_histogram:long_name = "histogram of upper tropospheric ozone mixing ratios" ;
+    		ozone_upper_troposheric_mixing_ratio_histogram:comment = "Histogram of upper tropospheric ozone mixing ratios in the current granule" ;
+    	int ozone_tropospheric_vertical_column_histogram(histogram_axis_tropospheric_ozone) ;
+    		ozone_tropospheric_vertical_column_histogram:_FillValue = -2147483647 ;
+    		ozone_tropospheric_vertical_column_histogram:units = "1" ;
+    		ozone_tropospheric_vertical_column_histogram:standard_name = "TBD" ;
+    		ozone_tropospheric_vertical_column_histogram:long_name = "histogram of tropospheric ozone columns" ;
+    		ozone_tropospheric_vertical_column_histogram:comment = "Histogram of tropospheric ozone columns in the current granule" ;
+    		ozone_tropospheric_vertical_column_histogram:number_of_values_higher_than_0.025 = "0" ;
+    } // group QA_STATISTICS
+
+  group: ALGORITHM_SETTINGS {
+
+    // group attributes:
+    		:upper_tropospheric_o3_minimum_start = "" ;
+    		:upper_tropospheric_o3_minimum_continue = "" ;
+    		:upper_tropospheric_o3_minimum_iterations = "" ;
+    		:upper_tropospheric_o3_maximum_iterations = "" ;
+    		:upper_tropospheric_o3_cloud_maximum_height = "" ;
+    		:upper_tropospheric_o3_cloud_minimum_height = "" ;
+    		:upper_tropospheric_o3_pressure_minimum_difference = "" ;
+    		:upper_tropospheric_o3_pressure_minimum = "" ;
+    		:stratospheric_o3_cloud_topheight = "27000.0_Pa" ;
+    		:stratospheric_o3_cloud_minimum_fraction = "0.8" ;
+    		:stratospheric_o3_cloud_minimum_height = "8500.0" ;
+    		:stratospheric_o3_cloud_maximum_height = "14900.0" ;
+    		:stratospheric_o3_ref_minimum = "0.08923_mol m-2" ;
+    		:stratospheric_o3_ref_minimum_number = "50" ;
+    		:stratospheric_o3_ref_maximum_deviation = "0.00669225_mol m-2" ;
+    		:stratospheric_o3_ref_maximum_delta = "0.00223075_mol m-2/latband" ;
+    		:tropospheric_o3_cloud_maximum_fraction = "0.1" ;
+    } // group ALGORITHM_SETTINGS
+
+  group: GRANULE_DESCRIPTION {
+
+    // group attributes:
+    		:ProductShortName = "L2__O3_TCL" ;
+    		:ProcessLevel = "2c" ;
+    		:GranuleStart = "2023-08-24T12:18:35" ;
+    		:GranuleEnd = "2023-08-30T13:03:30" ;
+    		:InstrumentName = "Tropomi" ;
+    		:MissionName = "Sentinel 5 Precursor" ;
+    		:MissionShortName = "S5P" ;
+    		:ProcessorVersion = "02.05.00" ;
+    		:ProductFormatVersion = "2.1.0" ;
+    } // group GRANULE_DESCRIPTION
+  } // group METADATA
+}
