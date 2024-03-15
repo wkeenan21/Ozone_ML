@@ -89,8 +89,10 @@ new_dfs = []
 timesize = 96
 # columns we care about interpolating
 cols = ['o3', 'no2', 't2m', 'r2', 'sp', 'dswrf', 'MAXUVV', 'MAXDVV', 'orog', 'u10', 'v10', 'day_of_year', 'hour_of_day','pop_den'] #, 'no2', 'no2_bool'
-for adf in dfs.values():
 
+static_list = []
+for adf in dfs.values():
+    static_vars = {}
     df = fill_missing_hours(adf, 'datetime', target_months=[5,6,7,8,9], constant_columns=['county_code', 'site_number', 'county', 'site', 'site_name', 'pop_den', 'no2_bool'])
     df = add_time_columns(df, 'datetime')
     df = df[df['datetime'] > dt.datetime(year=2021, month=5, day=4)]
@@ -103,11 +105,20 @@ for adf in dfs.values():
         df[col] = df[col].interpolate() # limit=timesize
 
     df.rename(columns={'datetime':'actual_datetime'}, inplace=True)
-    df['datetime'] = pd.date_range(start=df['actual_datetime'].min(), periods=len(df), freq='H')
+    df['date'] = pd.date_range(start=df['actual_datetime'].min(), periods=len(df), freq='H')
+    df['o3'] = df['o3'] * 1000
+
+    for i in range(8):
+        df[f'o3_{i}day'] = df['o3'].shift(i)
 
     df.to_csv(fr'{baseDir}\Year2\Merged_Data\nh\{site}.csv')
-    constant_columns = ['orog', 'pop_den']
+
+    static_vars['site'] = site
+    static_vars['orog'] = df.reset_index()['orog'][0]
+    static_vars['pop_den'] = df.reset_index()['pop_den'][0]
+    static_list.append(static_vars)
+
+static_varsdf = pd.DataFrame.from_dict(static_list)
+static_varsdf.to_csv(fr'{baseDir}\Year2\Merged_Data\nh\statics.csv')
 
 sites = ['Evergreen', 'Idaho Springs', 'Five Points', 'Welby', 'Highlands Ranch', 'Rocky Flats', 'Boulder', 'Chatfield Reservoir', 'Sunnyside', 'East Plains', 'South Table']
-
-for site in sites:

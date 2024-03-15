@@ -1,0 +1,48 @@
+2024-03-13 16:16:06,147: Logging to C:\Users\wkeenan\OneDrive - DOI\Documents\GitHub\Ozone_ML\runs\test_run_1303_161606\output.log initialized.
+2024-03-13 16:16:06,148: ### Folder structure created at C:\Users\wkeenan\OneDrive - DOI\Documents\GitHub\Ozone_ML\runs\test_run_1303_161606
+2024-03-13 16:16:06,148: ### Run configurations for test_run
+2024-03-13 16:16:06,148: experiment_name: test_run
+2024-03-13 16:16:06,148: train_basin_file: C:\Users\wkeenan\OneDrive - DOI\Documents\GitHub\Ozone_ML\Year2\scripts_dir\neuralHydro\trainingSites.txt
+2024-03-13 16:16:06,148: validation_basin_file: C:\Users\wkeenan\OneDrive - DOI\Documents\GitHub\Ozone_ML\Year2\scripts_dir\neuralHydro\trainingSites.txt
+2024-03-13 16:16:06,148: test_basin_file: C:\Users\wkeenan\OneDrive - DOI\Documents\GitHub\Ozone_ML\Year2\scripts_dir\neuralHydro\trainingSites.txt
+2024-03-13 16:16:06,150: train_start_date: 2021-05-04 00:00:00
+2024-03-13 16:16:06,150: train_end_date: 2022-03-06 00:00:00
+2024-03-13 16:16:06,150: validation_start_date: 2021-05-04 00:00:00
+2024-03-13 16:16:06,150: validation_end_date: 2022-03-06 00:00:00
+2024-03-13 16:16:06,150: test_start_date: 2022-03-07 00:00:00
+2024-03-13 16:16:06,150: test_end_date: 2022-08-06 00:00:00
+2024-03-13 16:16:06,150: device: cpu
+2024-03-13 16:16:06,150: validate_every: 3
+2024-03-13 16:16:06,150: validate_n_random_basins: 1
+2024-03-13 16:16:06,150: metrics: ['NSE', 'RMSE', 'PEARSONR']
+2024-03-13 16:16:06,150: model: cudalstm
+2024-03-13 16:16:06,150: head: regression
+2024-03-13 16:16:06,150: output_activation: linear
+2024-03-13 16:16:06,150: hidden_size: 20
+2024-03-13 16:16:06,150: initial_forget_bias: 3
+2024-03-13 16:16:06,150: output_dropout: 0.4
+2024-03-13 16:16:06,150: optimizer: Adam
+2024-03-13 16:16:06,150: loss: MSE
+2024-03-13 16:16:06,150: learning_rate: {0: 0.01, 30: 0.005, 40: 0.001}
+2024-03-13 16:16:06,150: batch_size: 256
+2024-03-13 16:16:06,150: epochs: 25
+2024-03-13 16:16:06,150: clip_gradient_norm: 1
+2024-03-13 16:16:06,150: use_frequencies: 1H
+2024-03-13 16:16:06,151: predict_last_n: {'1H': 24}
+2024-03-13 16:16:06,151: seq_length: {'1H': 24}
+2024-03-13 16:16:06,151: num_workers: 8
+2024-03-13 16:16:06,151: log_interval: 5
+2024-03-13 16:16:06,151: log_tensorboard: True
+2024-03-13 16:16:06,151: log_n_figures: 1
+2024-03-13 16:16:06,151: save_weights_every: 1
+2024-03-13 16:16:06,151: dataset: ozone_dataset
+2024-03-13 16:16:06,151: data_dir: C:\Users\wkeenan\OneDrive - DOI\Documents\GitHub\Ozone_ML\Year2\Merged_Data\nh
+2024-03-13 16:16:06,151: dynamic_inputs: ['u10', 'v10', 'r2', 'sp', 't2m', 'dswrf', 'MAXUVV', 'MAXDVV']
+2024-03-13 16:16:06,151: target_variables: ['o3']
+2024-03-13 16:16:06,151: clip_targets_to_zero: ['o3']
+2024-03-13 16:16:06,151: number_of_basins: 11
+2024-03-13 16:16:06,151: run_dir: C:\Users\wkeenan\OneDrive - DOI\Documents\GitHub\Ozone_ML\runs\test_run_1303_161606
+2024-03-13 16:16:06,151: train_dir: C:\Users\wkeenan\OneDrive - DOI\Documents\GitHub\Ozone_ML\runs\test_run_1303_161606\train_data
+2024-03-13 16:16:06,151: img_log_dir: C:\Users\wkeenan\OneDrive - DOI\Documents\GitHub\Ozone_ML\runs\test_run_1303_161606\img_log
+2024-03-13 16:16:06,153: ### Device cpu will be used for training
+2024-03-13 16:16:06,153: Loading basin data into xarray data set.
