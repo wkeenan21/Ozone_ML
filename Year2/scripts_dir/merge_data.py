@@ -77,14 +77,14 @@ for year in years:
 a = pd.concat(dfs.values(), ignore_index=True)
 
 # read in population data
-pop_df = pd.read_csv(r"D:\Will_Git\Ozone_ML\Year2\BasicGIS\Pop_Den_O3.csv")
+pop_df = pd.read_csv(r"D:\Will_Git\Ozone_ML\Year2\BasicGIS\pop_den_nlcd.csv")
 pop_df['site'] = pop_df['site_numbe'] + pop_df['county_cod']
 pop_drop = []
 for col in pop_df.columns:
-    if 'RASTERVALU' not in col and col != 'site':
+    if 'pop_den' not in col and 'NLCD' not in col and col != 'site':
         pop_drop.append(col)
 pop_df.drop(labels=pop_drop, axis=1, inplace=True)
-pop_df.rename(columns={'RASTERVALU': 'pop_den'}, inplace=True)
+#pop_df.rename(columns={'RASTERVALU': 'pop_den'}, inplace=True)
 
 # site numbers are not unique, only unique by county. So make a new column for unique sites
 a['site'] = a['site_number'] + a['county_code']
@@ -109,7 +109,7 @@ no2_sites = ['Welby', 'Rocky Flats', 'Sunnyside', 'Five Points']
 a['no2_bool'] = True
 a['no2_bool'].where(a['site_name'].isin(no2_sites), other=False, inplace=True)
 
-a.to_csv(fr"{baseDir}\Year2\Merged_Data\merge7.csv")
+a.to_csv(fr"{baseDir}\Year2\Merged_Data\merge8.csv")
 
 
 sites = a['latitude'].unique()

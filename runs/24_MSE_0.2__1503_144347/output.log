@@ -1,0 +1,48 @@
+2024-03-15 14:43:47,588: Logging to D:\Will_Git\Ozone_ML\runs\24_MSE_0.2__1503_144347\output.log initialized.
+2024-03-15 14:43:47,589: ### Folder structure created at D:\Will_Git\Ozone_ML\runs\24_MSE_0.2__1503_144347
+2024-03-15 14:43:47,589: ### Run configurations for 24_MSE_0.2_
+2024-03-15 14:43:47,589: batch_size: 256
+2024-03-15 14:43:47,589: clip_gradient_norm: 1
+2024-03-15 14:43:47,589: clip_targets_to_zero: ['o3']
+2024-03-15 14:43:47,589: data_dir: D:\Will_Git\Ozone_ML\Year2\Merged_Data\nh2
+2024-03-15 14:43:47,589: dataset: ozone_dataset
+2024-03-15 14:43:47,589: device: cpu
+2024-03-15 14:43:47,590: dynamic_inputs: ['o3_6hour', 'u10', 'v10', 'r2', 'sp', 't2m', 'dswrf', 'MAXUVV', 'MAXDVV']
+2024-03-15 14:43:47,590: epochs: 25
+2024-03-15 14:43:47,590: experiment_name: 24_MSE_0.2_
+2024-03-15 14:43:47,590: head: regression
+2024-03-15 14:43:47,591: hidden_size: 20
+2024-03-15 14:43:47,591: initial_forget_bias: 3
+2024-03-15 14:43:47,591: learning_rate: {0: 0.01, 30: 0.005, 40: 0.001}
+2024-03-15 14:43:47,591: log_interval: 5
+2024-03-15 14:43:47,591: log_n_figures: 1
+2024-03-15 14:43:47,591: log_tensorboard: True
+2024-03-15 14:43:47,591: loss: MSE
+2024-03-15 14:43:47,591: metrics: ['NSE', 'RMSE', 'Pearson-r']
+2024-03-15 14:43:47,591: model: cudalstm
+2024-03-15 14:43:47,591: num_workers: 8
+2024-03-15 14:43:47,591: optimizer: Adam
+2024-03-15 14:43:47,592: output_activation: linear
+2024-03-15 14:43:47,592: output_dropout: 0.2
+2024-03-15 14:43:47,592: predict_last_n: {'1H': 1}
+2024-03-15 14:43:47,592: save_weights_every: 1
+2024-03-15 14:43:47,592: seq_length: {'1H': 24}
+2024-03-15 14:43:47,592: target_variables: ['o3']
+2024-03-15 14:43:47,592: test_basin_file: D:\Will_Git\Ozone_ML\Year2\scripts_dir\neuralHydro\trainingSites.txt
+2024-03-15 14:43:47,592: test_end_date: 2023-12-31 00:00:00
+2024-03-15 14:43:47,592: test_start_date: 2023-01-01 00:00:00
+2024-03-15 14:43:47,592: train_basin_file: D:\Will_Git\Ozone_ML\Year2\scripts_dir\neuralHydro\trainingSites.txt
+2024-03-15 14:43:47,593: train_end_date: 2022-12-31 00:00:00
+2024-03-15 14:43:47,593: train_start_date: 2021-01-01 00:00:00
+2024-03-15 14:43:47,593: use_frequencies: 1H
+2024-03-15 14:43:47,593: validate_every: 5
+2024-03-15 14:43:47,593: validate_n_random_basins: 1
+2024-03-15 14:43:47,593: validation_basin_file: D:\Will_Git\Ozone_ML\Year2\scripts_dir\neuralHydro\trainingSites.txt
+2024-03-15 14:43:47,593: validation_end_date: 2023-12-31 00:00:00
+2024-03-15 14:43:47,593: validation_start_date: 2023-01-01 00:00:00
+2024-03-15 14:43:47,593: static_attributes: ['NLCD', 'pop_den', 'orog']
+2024-03-15 14:43:47,593: number_of_basins: 11
+2024-03-15 14:43:47,593: run_dir: D:\Will_Git\Ozone_ML\runs\24_MSE_0.2__1503_144347
+2024-03-15 14:43:47,594: train_dir: D:\Will_Git\Ozone_ML\runs\24_MSE_0.2__1503_144347\train_data
+2024-03-15 14:43:47,594: img_log_dir: D:\Will_Git\Ozone_ML\runs\24_MSE_0.2__1503_144347\img_log
+2024-03-15 14:43:47,617: ### Device cpu will be used for training

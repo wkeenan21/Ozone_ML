@@ -1,0 +1,68 @@
+batch_size: 256
+clip_gradient_norm: 1
+clip_targets_to_zero:
+- o3
+commit_hash: e4329c3
+data_dir: D:\Will_Git\Ozone_ML\Year2\Merged_Data\nh2
+dataset: ozone_dataset
+device: cpu
+dynamic_inputs:
+- o3_6hour
+- u10
+- v10
+- r2
+- sp
+- dswrf
+- MAXUVV
+- MAXDVV
+epochs: 25
+experiment_name: 6_missing_t2m
+head: regression
+hidden_size: 20
+img_log_dir: D:\Will_Git\Ozone_ML\forecast_runs\6_missing_t2m_1104_192338\img_log
+initial_forget_bias: 3
+learning_rate:
+  0: 0.01
+  30: 0.005
+  40: 0.001
+log_interval: 5
+log_n_figures: 1
+log_tensorboard: true
+loss: RMSE
+metrics:
+- NSE
+- RMSE
+- Pearson-r
+model: cudalstm
+num_workers: 8
+number_of_basins: 11
+optimizer: Adam
+output_activation: linear
+output_dropout: 0.2
+package_version: 1.10.0
+predict_last_n:
+  1H: 1
+run_dir: D:\Will_Git\Ozone_ML\forecast_runs\6_missing_t2m_1104_192338
+save_weights_every: 1
+seed: 92461
+seq_length:
+  1H: 24
+static_attributes:
+- NLCD
+- pop_den
+- orog
+target_variables:
+- o3
+test_basin_file: D:\Will_Git\Ozone_ML\Year2\scripts_dir\neuralHydro\trainingSites.txt
+test_end_date: 31/12/2023
+test_start_date: 01/01/2023
+train_basin_file: D:\Will_Git\Ozone_ML\Year2\scripts_dir\neuralHydro\trainingSites.txt
+train_dir: D:\Will_Git\Ozone_ML\forecast_runs\6_missing_t2m_1104_192338\train_data
+train_end_date: 31/12/2022
+train_start_date: 01/01/2021
+use_frequencies: 1H
+validate_every: 5
+validate_n_random_basins: 1
+validation_basin_file: D:\Will_Git\Ozone_ML\Year2\scripts_dir\neuralHydro\trainingSites.txt
+validation_end_date: 31/12/2023
+validation_start_date: 01/01/2023

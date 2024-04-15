@@ -109,15 +109,16 @@ for year in years:
 
 a = pd.concat(dfs.values(), ignore_index=True)
 
+a = pd.read_csv(r"D:\10k_grid_merges\10kgrid_merge3.csv")
 # read in population data
-pop_df = pd.read_csv(r"D:\Will_Git\Ozone_ML\Year2\BasicGIS\grid_extract.csv")
+pop_df = pd.read_csv(r"D:\Will_Git\Ozone_ML\Year2\BasicGIS\grid_pop_nlcd.csv")
 #pop_df['site'] = pop_df['site_numbe'] + pop_df['county_cod']
 
-pop_df.rename(columns={'latitude':'point_latitude', 'longitude':'point_longitude', 'orog':'elev'}, inplace=True)
+pop_df.rename(columns={'latitude':'point_latitude', 'longitude':'point_longitude', 'RASTERVALU':'pop_den'}, inplace=True)
 
 pop_drop = []
 for col in pop_df.columns:
-    if 'point' not in col and 'NLCD' not in col and 'elev' not in col:
+    if 'point' not in col and 'pop_den' not in col:
         pop_drop.append(col)
 pop_df.drop(labels=pop_drop, axis=1, inplace=True)
 
@@ -125,7 +126,8 @@ pop_df.drop(labels=pop_drop, axis=1, inplace=True)
 pop_df['coords_x'] = pop_df['point_latitude'].astype(str) + ',' + pop_df['point_longitude'].astype(str)
 
 # merge pop den with other data
-a = a.merge(pop_df, on='coords_x', how='inner')
+a = a.merge(pop_df[['pop_den', 'coords_x']], on='coords_x', how='inner')
+a.to_csv(fr"{baseDir}\Year2\Merged_Data\10kgrid_merge4.csv")
 
 # site numbers are not unique, only unique by county. So make a new column for unique sites
 a['site'] = a['site_number'] + a['county_code']

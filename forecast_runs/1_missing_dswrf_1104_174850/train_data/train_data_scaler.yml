@@ -1,0 +1,90 @@
+attribute_means:
+  NLCD: 0.7171717000000001
+  orog: 1808.8941090909093
+  pop_den: 1032.4982782181817
+attribute_stds:
+  NLCD: 0.6523719857137568
+  orog: 325.7523149693627
+  pop_den: 1797.4072121042711
+xarray_feature_scale:
+  coords: {}
+  attrs: {}
+  dims: {}
+  data_vars:
+    MAXDVV:
+      dims: []
+      attrs: {}
+      data: 0.02614140510559082
+    MAXUVV:
+      dims: []
+      attrs: {}
+      data: 0.04078571870923042
+    o3:
+      dims: []
+      attrs: {}
+      data: 15.725396156311035
+    o3_1hour:
+      dims: []
+      attrs: {}
+      data: 15.725396156311035
+    r2:
+      dims: []
+      attrs: {}
+      data: 23.34646987915039
+    sp:
+      dims: []
+      attrs: {}
+      data: 2920.98974609375
+    t2m:
+      dims: []
+      attrs: {}
+      data: 7.59680700302124
+    u10:
+      dims: []
+      attrs: {}
+      data: 2.2645914554595947
+    v10:
+      dims: []
+      attrs: {}
+      data: 2.4413814544677734
+xarray_feature_center:
+  coords: {}
+  attrs: {}
+  dims: {}
+  data_vars:
+    MAXDVV:
+      dims: []
+      attrs: {}
+      data: 0.008608689531683922
+    MAXUVV:
+      dims: []
+      attrs: {}
+      data: -0.020386362448334694
+    o3:
+      dims: []
+      attrs: {}
+      data: 45.110740661621094
+    o3_1hour:
+      dims: []
+      attrs: {}
+      data: 45.110740661621094
+    r2:
+      dims: []
+      attrs: {}
+      data: 44.11639404296875
+    sp:
+      dims: []
+      attrs: {}
+      data: 82067.9375
+    t2m:
+      dims: []
+      attrs: {}
+      data: 292.6593322753906
+    u10:
+      dims: []
+      attrs: {}
+      data: 0.18764446675777435
+    v10:
+      dims: []
+      attrs: {}
+      data: 0.08335831761360168

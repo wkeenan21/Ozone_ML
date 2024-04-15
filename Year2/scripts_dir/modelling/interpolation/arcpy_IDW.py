@@ -44,7 +44,7 @@ def dt_to_name(dt):
 
 results = r"D:\Will_Git\Ozone_ML\Year2\results\grid_results"
 
-gridDf = r"D:\Will_Git\Ozone_ML\Year2\Merged_Data\10kgrid_merge.csv"
+gridDf = r"D:\10k_grid_merges\10kgrid_merge4.csv"
 gridDf = pd.read_csv(gridDf)
 gridDf['datetime'] = pd.to_datetime(gridDf['datetime'])
 siteCoords = gridDf['mapped_o'].unique()

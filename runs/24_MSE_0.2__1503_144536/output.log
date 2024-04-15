@@ -1,0 +1,86 @@
+2024-03-15 14:45:36,283: Logging to D:\Will_Git\Ozone_ML\runs\24_MSE_0.2__1503_144536\output.log initialized.
+2024-03-15 14:45:36,283: ### Folder structure created at D:\Will_Git\Ozone_ML\runs\24_MSE_0.2__1503_144536
+2024-03-15 14:45:36,283: ### Run configurations for 24_MSE_0.2_
+2024-03-15 14:45:36,283: batch_size: 256
+2024-03-15 14:45:36,283: clip_gradient_norm: 1
+2024-03-15 14:45:36,283: clip_targets_to_zero: ['o3']
+2024-03-15 14:45:36,283: data_dir: D:\Will_Git\Ozone_ML\Year2\Merged_Data\nh2
+2024-03-15 14:45:36,283: dataset: ozone_dataset
+2024-03-15 14:45:36,283: device: cpu
+2024-03-15 14:45:36,284: dynamic_inputs: ['o3_6hour', 'u10', 'v10', 'r2', 'sp', 't2m', 'dswrf', 'MAXUVV', 'MAXDVV']
+2024-03-15 14:45:36,284: epochs: 25
+2024-03-15 14:45:36,284: experiment_name: 24_MSE_0.2_
+2024-03-15 14:45:36,284: head: regression
+2024-03-15 14:45:36,284: hidden_size: 20
+2024-03-15 14:45:36,284: initial_forget_bias: 3
+2024-03-15 14:45:36,285: learning_rate: {0: 0.01, 30: 0.005, 40: 0.001}
+2024-03-15 14:45:36,285: log_interval: 5
+2024-03-15 14:45:36,285: log_n_figures: 1
+2024-03-15 14:45:36,285: log_tensorboard: True
+2024-03-15 14:45:36,285: loss: MSE
+2024-03-15 14:45:36,285: metrics: ['NSE', 'RMSE', 'Pearson-r']
+2024-03-15 14:45:36,285: model: cudalstm
+2024-03-15 14:45:36,285: num_workers: 8
+2024-03-15 14:45:36,285: optimizer: Adam
+2024-03-15 14:45:36,285: output_activation: linear
+2024-03-15 14:45:36,285: output_dropout: 0.2
+2024-03-15 14:45:36,286: predict_last_n: {'1H': 1}
+2024-03-15 14:45:36,286: save_weights_every: 1
+2024-03-15 14:45:36,286: seq_length: {'1H': 24}
+2024-03-15 14:45:36,286: target_variables: ['o3']
+2024-03-15 14:45:36,286: test_basin_file: D:\Will_Git\Ozone_ML\Year2\scripts_dir\neuralHydro\trainingSites.txt
+2024-03-15 14:45:36,286: test_end_date: 2023-12-31 00:00:00
+2024-03-15 14:45:36,286: test_start_date: 2023-01-01 00:00:00
+2024-03-15 14:45:36,286: train_basin_file: D:\Will_Git\Ozone_ML\Year2\scripts_dir\neuralHydro\trainingSites.txt
+2024-03-15 14:45:36,286: train_end_date: 2022-12-31 00:00:00
+2024-03-15 14:45:36,286: train_start_date: 2021-01-01 00:00:00
+2024-03-15 14:45:36,286: use_frequencies: 1H
+2024-03-15 14:45:36,287: validate_every: 5
+2024-03-15 14:45:36,287: validate_n_random_basins: 1
+2024-03-15 14:45:36,287: validation_basin_file: D:\Will_Git\Ozone_ML\Year2\scripts_dir\neuralHydro\trainingSites.txt
+2024-03-15 14:45:36,287: validation_end_date: 2023-12-31 00:00:00
+2024-03-15 14:45:36,287: validation_start_date: 2023-01-01 00:00:00
+2024-03-15 14:45:36,287: static_attributes: ['NLCD', 'pop_den', 'orog']
+2024-03-15 14:45:36,287: number_of_basins: 11
+2024-03-15 14:45:36,287: run_dir: D:\Will_Git\Ozone_ML\runs\24_MSE_0.2__1503_144536
+2024-03-15 14:45:36,287: train_dir: D:\Will_Git\Ozone_ML\runs\24_MSE_0.2__1503_144536\train_data
+2024-03-15 14:45:36,288: img_log_dir: D:\Will_Git\Ozone_ML\runs\24_MSE_0.2__1503_144536\img_log
+2024-03-15 14:45:36,290: ### Device cpu will be used for training
+2024-03-15 14:45:36,302: Loading basin data into xarray data set.
+2024-03-15 14:45:38,034: Create lookup table and convert to pytorch tensor
+2024-03-15 14:46:11,795: Epoch 1 average loss: avg_loss: 0.14888, avg_total_loss: 0.14888
+2024-03-15 14:46:40,771: Epoch 2 average loss: avg_loss: 0.11927, avg_total_loss: 0.11927
+2024-03-15 14:47:09,784: Epoch 3 average loss: avg_loss: 0.11295, avg_total_loss: 0.11295
+2024-03-15 14:47:38,775: Epoch 4 average loss: avg_loss: 0.10913, avg_total_loss: 0.10913
+2024-03-15 14:48:08,120: Epoch 5 average loss: avg_loss: 0.10732, avg_total_loss: 0.10732
+2024-03-15 14:48:11,593: Epoch 5 average validation loss: 0.13242 -- Median validation metrics: avg_loss: 0.13242, NSE: 0.72543, RMSE: 8.18010, Pearson-r: 0.85205
+2024-03-15 14:48:41,912: Epoch 6 average loss: avg_loss: 0.10573, avg_total_loss: 0.10573
+2024-03-15 14:49:11,711: Epoch 7 average loss: avg_loss: 0.10361, avg_total_loss: 0.10361
+2024-03-15 14:49:40,834: Epoch 8 average loss: avg_loss: 0.10221, avg_total_loss: 0.10221
+2024-03-15 14:50:10,188: Epoch 9 average loss: avg_loss: 0.10167, avg_total_loss: 0.10167
+2024-03-15 14:50:39,743: Epoch 10 average loss: avg_loss: 0.09975, avg_total_loss: 0.09975
+2024-03-15 14:50:42,751: Epoch 10 average validation loss: 0.24542 -- Median validation metrics: avg_loss: 0.24542, NSE: 0.63591, RMSE: 10.92475, Pearson-r: 0.80161
+2024-03-15 14:51:12,837: Epoch 11 average loss: avg_loss: 0.09923, avg_total_loss: 0.09923
+2024-03-15 14:51:41,676: Epoch 12 average loss: avg_loss: 0.09796, avg_total_loss: 0.09796
+2024-03-15 14:52:10,583: Epoch 13 average loss: avg_loss: 0.09792, avg_total_loss: 0.09792
+2024-03-15 14:52:39,801: Epoch 14 average loss: avg_loss: 0.09667, avg_total_loss: 0.09667
+2024-03-15 14:53:09,126: Epoch 15 average loss: avg_loss: 0.09569, avg_total_loss: 0.09569
+2024-03-15 14:53:11,578: Epoch 15 average validation loss: 0.25071 -- Median validation metrics: avg_loss: 0.25071, NSE: 0.62863, RMSE: 11.03333, Pearson-r: 0.79849
+2024-03-15 14:53:40,657: Epoch 16 average loss: avg_loss: 0.09542, avg_total_loss: 0.09542
+2024-03-15 14:54:10,380: Epoch 17 average loss: avg_loss: 0.09458, avg_total_loss: 0.09458
+2024-03-15 14:54:40,005: Epoch 18 average loss: avg_loss: 0.09385, avg_total_loss: 0.09385
+2024-03-15 14:55:09,320: Epoch 19 average loss: avg_loss: 0.09374, avg_total_loss: 0.09374
+2024-03-15 14:55:41,016: Epoch 20 average loss: avg_loss: 0.09311, avg_total_loss: 0.09311
+2024-03-15 14:55:44,935: Epoch 20 average validation loss: 0.16135 -- Median validation metrics: avg_loss: 0.16135, NSE: 0.71858, RMSE: 9.07675, Pearson-r: 0.85230
+2024-03-15 14:56:14,708: Epoch 21 average loss: avg_loss: 0.09251, avg_total_loss: 0.09251
+2024-03-15 14:56:44,582: Epoch 22 average loss: avg_loss: 0.09212, avg_total_loss: 0.09212
+2024-03-15 14:57:14,322: Epoch 23 average loss: avg_loss: 0.09234, avg_total_loss: 0.09234
+2024-03-15 14:57:43,486: Epoch 24 average loss: avg_loss: 0.09204, avg_total_loss: 0.09204
+2024-03-15 14:58:12,438: Epoch 25 average loss: avg_loss: 0.09113, avg_total_loss: 0.09113
+2024-03-15 14:58:15,160: Epoch 25 average validation loss: 0.11696 -- Median validation metrics: avg_loss: 0.11696, NSE: 0.68406, RMSE: 7.63097, Pearson-r: 0.85122
+2024-03-15 14:59:09,094: Using the model weights from D:\Will_Git\Ozone_ML\runs\24_MSE_0.2__1503_142219\model_epoch015.pt
+2024-03-15 14:59:31,027: Using the model weights from D:\Will_Git\Ozone_ML\runs\24_MSE_0.2__1503_142219\model_epoch015.pt
+2024-03-15 14:59:58,225: Using the model weights from D:\Will_Git\Ozone_ML\runs\24_MSE_0.2__1503_142219\model_epoch015.pt
+2024-03-15 15:00:39,761: Using the model weights from D:\Will_Git\Ozone_ML\runs\24_MSE_0.2__1503_142219\model_epoch015.pt
+2024-03-15 15:00:46,905: Using the model weights from D:\Will_Git\Ozone_ML\runs\24_MSE_0.2__1503_142219\model_epoch015.pt
+2024-03-15 15:02:35,696: Using the model weights from D:\Will_Git\Ozone_ML\runs\24_MSE_0.2__1503_142219\model_epoch015.pt

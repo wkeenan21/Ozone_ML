@@ -59,9 +59,9 @@ def fill_missing_hours(df, datetime_column_name, target_months, constant_columns
     merged_df = pd.merge(complete_df, df, on=[datetime_column_name]+constant_columns, how='left')
     return merged_df
 
-baseDir = r'C:\Users\wkeenan\OneDrive - DOI\Documents\GitHub\Ozone_ML'
+baseDir = r'D:\Will_Git\Ozone_ML'
 # Import data
-O3J = pd.read_csv(fr"{baseDir}/Year2/Merged_Data/merge7.csv")
+O3J = pd.read_csv(fr"{baseDir}/Year2/Merged_Data/merge8.csv")
 # do some preprocessing
 # remove columns
 remove = []
@@ -93,7 +93,7 @@ cols = ['o3', 'no2', 't2m', 'r2', 'sp', 'dswrf', 'MAXUVV', 'MAXDVV', 'orog', 'u1
 static_list = []
 for adf in dfs.values():
     static_vars = {}
-    df = fill_missing_hours(adf, 'datetime', target_months=[5,6,7,8,9], constant_columns=['county_code', 'site_number', 'county', 'site', 'site_name', 'pop_den', 'no2_bool'])
+    df = fill_missing_hours(adf, 'datetime', target_months=[1,2,3,4,5,6,7,8,9,10,11,12], constant_columns=['county_code', 'site_number', 'county', 'site', 'site_name', 'pop_den', 'no2_bool'])
     df = add_time_columns(df, 'datetime')
     df = df[df['datetime'] > dt.datetime(year=2021, month=5, day=4)]
 
@@ -102,23 +102,36 @@ for adf in dfs.values():
 
     for col in cols:
         # interpolate everything. After this there should be no NANs that are timesize hours away from other NaNs
-        df[col] = df[col].interpolate() # limit=timesize
+        df[col] = df[col].interpolate(limit=timesize) # limit=timesize
 
     df.rename(columns={'datetime':'actual_datetime'}, inplace=True)
     df['date'] = pd.date_range(start=df['actual_datetime'].min(), periods=len(df), freq='H')
     df['o3'] = df['o3'] * 1000
 
-    for i in range(8):
-        df[f'o3_{i}day'] = df['o3'].shift(i)
+    # create lagged ozone columns
+    for i in range(1,25):
+        df[f'o3_{i}hour'] = df['o3'].shift(i)
+        df[f'no2_{i}hour']= df['no2'].shift(i)
 
-    df.to_csv(fr'{baseDir}\Year2\Merged_Data\nh\{site}.csv')
+    df.to_csv(fr'{baseDir}\Year2\Merged_Data\nh2\{site}.csv')
 
     static_vars['site'] = site
     static_vars['orog'] = df.reset_index()['orog'][0]
     static_vars['pop_den'] = df.reset_index()['pop_den'][0]
+    static_vars['NLCD'] = df.reset_index()['NLCD'][0]
     static_list.append(static_vars)
 
 static_varsdf = pd.DataFrame.from_dict(static_list)
-static_varsdf.to_csv(fr'{baseDir}\Year2\Merged_Data\nh\statics.csv')
+static_varsdf.to_csv(fr'{baseDir}\Year2\Merged_Data\nh2\statics.csv')
 
 sites = ['Evergreen', 'Idaho Springs', 'Five Points', 'Welby', 'Highlands Ranch', 'Rocky Flats', 'Boulder', 'Chatfield Reservoir', 'Sunnyside', 'East Plains', 'South Table']
+
+totalRows = 0
+for file in os.listdir(r'D:\Will_Git\Ozone_ML\Year2\Merged_Data\nh2'):
+    if 'statics' not in file:
+        df = pd.read_csv(os.path.join(r'D:\Will_Git\Ozone_ML\Year2\Merged_Data\nh2', file))
+        rows = len(df['o3'].dropna())
+        print(rows)
+        totalRows += rows
+
+totalRows
