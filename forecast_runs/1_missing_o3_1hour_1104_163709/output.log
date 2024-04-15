@@ -2215,3 +2215,27 @@
 2024-04-15 16:48:39,271: Using the model weights from D:\Will_Git\Ozone_ML\variable_importance\6_missing_dswrf_1104_193528\model_epoch025.pt
 2024-04-15 16:49:03,600: Stored metrics at D:\Will_Git\Ozone_ML\variable_importance\6_missing_dswrf_1104_193528\test\model_epoch025\test_metrics.csv
 2024-04-15 16:49:03,606: Stored results at D:\Will_Git\Ozone_ML\variable_importance\6_missing_dswrf_1104_193528\test\model_epoch025\test_results.p
+2024-04-15 16:49:17,932: Using the model weights from D:\Will_Git\Ozone_ML\variable_importance\6_missing_MAXDVV_1104_195910\model_epoch025.pt
+2024-04-15 16:49:42,261: Stored metrics at D:\Will_Git\Ozone_ML\variable_importance\6_missing_MAXDVV_1104_195910\test\model_epoch025\test_metrics.csv
+2024-04-15 16:49:42,269: Stored results at D:\Will_Git\Ozone_ML\variable_importance\6_missing_MAXDVV_1104_195910\test\model_epoch025\test_results.p
+2024-04-15 16:49:56,730: Using the model weights from D:\Will_Git\Ozone_ML\variable_importance\6_missing_MAXUVV_1104_194718\model_epoch025.pt
+2024-04-15 16:50:20,830: Stored metrics at D:\Will_Git\Ozone_ML\variable_importance\6_missing_MAXUVV_1104_194718\test\model_epoch025\test_metrics.csv
+2024-04-15 16:50:20,838: Stored results at D:\Will_Git\Ozone_ML\variable_importance\6_missing_MAXUVV_1104_194718\test\model_epoch025\test_results.p
+2024-04-15 16:50:35,008: Using the model weights from D:\Will_Git\Ozone_ML\variable_importance\6_missing_o3_6hour_1104_182422\model_epoch025.pt
+2024-04-15 16:50:59,042: Stored metrics at D:\Will_Git\Ozone_ML\variable_importance\6_missing_o3_6hour_1104_182422\test\model_epoch025\test_metrics.csv
+2024-04-15 16:50:59,104: Stored results at D:\Will_Git\Ozone_ML\variable_importance\6_missing_o3_6hour_1104_182422\test\model_epoch025\test_results.p
+2024-04-15 16:51:13,367: Using the model weights from D:\Will_Git\Ozone_ML\variable_importance\6_missing_r2_1104_185954\model_epoch025.pt
+2024-04-15 16:51:37,672: Stored metrics at D:\Will_Git\Ozone_ML\variable_importance\6_missing_r2_1104_185954\test\model_epoch025\test_metrics.csv
+2024-04-15 16:51:37,674: Stored results at D:\Will_Git\Ozone_ML\variable_importance\6_missing_r2_1104_185954\test\model_epoch025\test_results.p
+2024-04-15 16:51:51,844: Using the model weights from D:\Will_Git\Ozone_ML\variable_importance\6_missing_sp_1104_191146\model_epoch025.pt
+2024-04-15 16:52:16,149: Stored metrics at D:\Will_Git\Ozone_ML\variable_importance\6_missing_sp_1104_191146\test\model_epoch025\test_metrics.csv
+2024-04-15 16:52:16,159: Stored results at D:\Will_Git\Ozone_ML\variable_importance\6_missing_sp_1104_191146\test\model_epoch025\test_results.p
+2024-04-15 16:52:31,363: Using the model weights from D:\Will_Git\Ozone_ML\variable_importance\6_missing_t2m_1104_192338\model_epoch025.pt
+2024-04-15 16:52:55,976: Stored metrics at D:\Will_Git\Ozone_ML\variable_importance\6_missing_t2m_1104_192338\test\model_epoch025\test_metrics.csv
+2024-04-15 16:52:55,991: Stored results at D:\Will_Git\Ozone_ML\variable_importance\6_missing_t2m_1104_192338\test\model_epoch025\test_results.p
+2024-04-15 16:53:10,721: Using the model weights from D:\Will_Git\Ozone_ML\variable_importance\6_missing_u10_1104_183612\model_epoch025.pt
+2024-04-15 16:53:35,717: Stored metrics at D:\Will_Git\Ozone_ML\variable_importance\6_missing_u10_1104_183612\test\model_epoch025\test_metrics.csv
+2024-04-15 16:53:35,724: Stored results at D:\Will_Git\Ozone_ML\variable_importance\6_missing_u10_1104_183612\test\model_epoch025\test_results.p
+2024-04-15 16:53:50,080: Using the model weights from D:\Will_Git\Ozone_ML\variable_importance\6_missing_v10_1104_184804\model_epoch025.pt
+2024-04-15 16:54:14,905: Stored metrics at D:\Will_Git\Ozone_ML\variable_importance\6_missing_v10_1104_184804\test\model_epoch025\test_metrics.csv
+2024-04-15 16:54:14,912: Stored results at D:\Will_Git\Ozone_ML\variable_importance\6_missing_v10_1104_184804\test\model_epoch025\test_results.p

@@ -75,3 +75,10 @@ for file in os.listdir(r'D:\Will_Git\Ozone_ML\variable_importance'):
         #     print(f"{key}: {val:.3f}")
 results = pd.DataFrame.from_dict(tuningResults)
 results = results.drop_duplicates()
+
+cols = []
+for col in results.columns:
+    if 'RMSE' in col:
+        cols.append(col)
+
+results['rmse_mean'] = results[cols].mean(axis=1)

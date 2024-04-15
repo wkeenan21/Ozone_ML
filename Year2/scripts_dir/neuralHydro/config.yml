@@ -6,7 +6,6 @@ data_dir: D:\Will_Git\Ozone_ML\Year2\Merged_Data\nh2
 dataset: ozone_dataset
 device: None
 dynamic_inputs:
-- o3_24hour
 - u10
 - v10
 - r2
